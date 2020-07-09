@@ -32,4 +32,4 @@
 
 
 ## Prototype
-https://www.figma.com/proto/iZtVHhNsfvenfRFKO2yZ7d/Friendly?node-id=6%3A8&scaling=scale-down
+https://www.figma.com/proto/iZtVHhNsfvenfRFKO2yZ7d/Friendly?node-id=2%3A0&scaling=scale-down
