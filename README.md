@@ -6,19 +6,19 @@
 
 - [ ] user can login with a username and password
     - [ ] user can create a new username and password if they don't already have an account
-- [ ] user can see active "I'm free" statuses
+- [ ] user can see active "I'm free" statuses of their friends
 - [ ] user can update status to "I'm free" which sends notifications to friends
     - [ ] User can write a persionalized message about what they want to do during that time and what city/where they are
 - [ ] User can delete/hide their status once it is no longer needed
 - [ ] user can search for their friends by username
 - [ ] user can add and remove friends
-- [ ] user can view their profile page with their friends list
+- [ ] user can view their profile page with their friends list and profile picture
 - [ ] user can use the camera to take a profile picture
 
 **Optional Nice-to-have Stories**
 
 - [ ] User can set what time a status will be deleted/when the user will no longer be free
-- [ ] User can tap a status to see more details
+- [ ] User can tap a status to see more details such as date posted, time free until, and description
 - [ ] User is able to schedule free time periods in advance, and see their friends scheduled time periods
     - [ ] User can see when scheduled free time periods match up with friends (can send a notification for this)
     - [ ] User can sync with google calendar to block off busy time periods
