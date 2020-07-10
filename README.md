@@ -46,7 +46,6 @@ Allows users to more easily plan when they will spend time with friends. When a 
 - [ ] User can group together friends in categories that only the user can see from their perspective
     - [ ] User can favorite/only show notifications from certain groups/people
 - [ ] User can put in their status which friends have said yes to hanging out so that users can see everyone who is going
-- [ ] User can update their status
 - [ ] User can click a link/button to message/calls to make plans with a friend that is currently free
 
 ### 2. Screen Archetypes
