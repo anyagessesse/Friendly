@@ -28,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //goes directly to main activity if a user is already logged in
         if (ParseUser.getCurrentUser() != null) {
             goMainActivity();
         }
@@ -54,10 +55,10 @@ public class LoginActivity extends AppCompatActivity {
                 signupUser(username, password);
             }
         });
-
     }
 
     private void signupUser(String username, String password) {
+        //creates a new ParseUser with given username and password
         ParseUser user = new ParseUser();
         user.setUsername(username);
         user.setPassword(password);
@@ -66,10 +67,12 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void done(ParseException e) {
                 if (e != null) {
+                    //signup unsuccessful
                     Log.e(TAG, "issue signing up", e);
                     Toast.makeText(LoginActivity.this, "pick a different username or password", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                //signup successful
                 goMainActivity();
             }
         });
@@ -80,10 +83,12 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void done(ParseUser user, ParseException e) {
                 if (e != null) {
+                    //login unsuccessful
                     Log.e(TAG, "issue logging in", e);
                     Toast.makeText(LoginActivity.this, "username or password is incorrect", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                //login successful
                 goMainActivity();
             }
         });

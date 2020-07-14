@@ -37,7 +37,7 @@ public class SearchFragment extends Fragment {
     private UsersAdapter adapter;
     private List<ParseUser> allUsers;
     private EditText etSearch;
-    private Button btnSearch;
+    private Button btnSearch; //TODO button currently does nothing, possibly remove or find use?
 
     public SearchFragment() {
         // Required empty public constructor
@@ -57,12 +57,12 @@ public class SearchFragment extends Fragment {
         etSearch = view.findViewById(R.id.etSearch);
         btnSearch = view.findViewById(R.id.btnSearch);
 
+        //set up recyclerview of users to search from
         rvUsers = view.findViewById(R.id.rvUsers);
         allUsers = new ArrayList<>();
         adapter = new UsersAdapter(getContext(), allUsers);
         rvUsers.setAdapter(adapter);
         rvUsers.setLayoutManager(new LinearLayoutManager(getContext()));
-
         queryUsers();
 
         //set a listener to filter out users that don't match edittext search bar
@@ -104,6 +104,7 @@ public class SearchFragment extends Fragment {
         query.findInBackground(new FindCallback<ParseUser>() {
             public void done(List<ParseUser> users, ParseException e) {
                 if (e != null) {
+                    //query was unsuccessful
                     Log.e(TAG, "issue getting posts", e);
                     return;
                 }
@@ -113,6 +114,4 @@ public class SearchFragment extends Fragment {
             }
         });
     }
-
-
 }

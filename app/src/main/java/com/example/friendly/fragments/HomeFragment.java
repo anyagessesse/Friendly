@@ -48,12 +48,12 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //set up recyclerview with all active statuses
         rvStatuses = view.findViewById(R.id.rvStatuses);
         allStatuses = new ArrayList<>();
         adapter = new StatusesAdapter(getContext(), allStatuses);
         rvStatuses.setAdapter(adapter);
         rvStatuses.setLayoutManager(new LinearLayoutManager(getContext()));
-
         queryStatuses();
     }
 
@@ -68,9 +68,11 @@ public class HomeFragment extends Fragment {
             @Override
             public void done(List<Status> statuses, ParseException e) {
                 if (e != null) {
+                    //query unsuccessful
                     Log.e(TAG, "issue getting posts", e);
                     return;
                 }
+                //query successful
                 allStatuses.addAll(statuses);
                 adapter.notifyDataSetChanged();
             }

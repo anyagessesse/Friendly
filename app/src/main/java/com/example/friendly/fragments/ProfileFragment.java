@@ -41,8 +41,9 @@ public class ProfileFragment extends Fragment {
         tvUser = view.findViewById(R.id.tvUser);
         ivProfilePic = view.findViewById(R.id.ivProfilePic);
 
+        //put user details into profile layout
         ivProfilePic.setVisibility(View.GONE); //TODO make picture visible when there is a profile picture to show
-
         tvUser.setText(ParseUser.getCurrentUser().getUsername());
+        //TODO add recyclerview of friends
     }
 }

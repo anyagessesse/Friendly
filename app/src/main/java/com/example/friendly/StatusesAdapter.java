@@ -32,6 +32,7 @@ public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        //gets each status and binds it to item_status layout
         Status status = statuses.get(position);
         holder.bind(status);
     }

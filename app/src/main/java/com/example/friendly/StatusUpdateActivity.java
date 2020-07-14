@@ -32,6 +32,7 @@ public class StatusUpdateActivity extends AppCompatActivity {
         etDescription = findViewById(R.id.etDescription);
         btnPostStatus = findViewById(R.id.btnPostStatus);
 
+        //adds status to db and navigates back to home fragment
         btnPostStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -54,11 +55,13 @@ public class StatusUpdateActivity extends AppCompatActivity {
 
         newStatus.saveInBackground(new SaveCallback() {
             @Override
-            public void done(ParseException e) {
+            public void done(ParseException e) {   //TODO show status on home fragment without refreshing query for all statuses
                 if (e != null) {
+                    //status unsuccesfully added to db
                     Log.e(TAG, "issue when saving post", e);
                     return;
                 }
+                //status successfully added to db
                 Log.i(TAG, "status save was successful!");
                 etDescription.setText("");
             }

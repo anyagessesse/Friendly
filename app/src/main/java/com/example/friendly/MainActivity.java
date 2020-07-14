@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
 
     private BottomNavigationView bottomNavigationView;
-    private Status status;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +37,14 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                //logout when user presses "log out" button
                 if (item.getItemId() == R.id.miLogout) {
                     ParseUser.logOut();
                     if (ParseUser.getCurrentUser() == null) {
                         goLoginActivity();
                     }
                 }
+                //goes to StatusUpdateActivity when user presses "post status" button
                 if (item.getItemId() == R.id.miPostStatus) {
                     Intent intent = new Intent(MainActivity.this, StatusUpdateActivity.class);
                     startActivity(intent);
@@ -75,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-        //sets the default selection
+        //sets the default selection as home fragment
         bottomNavigationView.setSelectedItemId(R.id.action_home);
     }
 
