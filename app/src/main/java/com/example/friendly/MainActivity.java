@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +16,7 @@ import com.example.friendly.fragments.HomeFragment;
 import com.example.friendly.fragments.ProfileFragment;
 import com.example.friendly.fragments.SearchFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
@@ -31,6 +33,18 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         // Remove default title text
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if(item.getItemId() == R.id.miLogout){
+                    ParseUser.logOut();
+                    if (ParseUser.getCurrentUser() == null) {
+                        goLoginActivity();
+                    }
+                }
+                return true;
+            }
+        });
 
         //navigate between fragments using bottom navigation
         final FragmentManager fragmentManager = getSupportFragmentManager();
@@ -62,6 +76,12 @@ public class MainActivity extends AppCompatActivity {
         });
         //sets the default selection
         bottomNavigationView.setSelectedItemId(R.id.action_home);
+    }
+
+    private void goLoginActivity() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override
