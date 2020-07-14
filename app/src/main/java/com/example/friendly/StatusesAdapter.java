@@ -15,8 +15,8 @@ import java.util.List;
 
 public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.ViewHolder> {
 
-    private Context context;
-    private List<Status> statuses;
+    private final Context context;
+    private final List<Status> statuses;
 
     public StatusesAdapter(Context context, List<Status> statuses) {
         this.context = context;

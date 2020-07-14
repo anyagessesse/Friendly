@@ -57,6 +57,7 @@ public class HomeFragment extends Fragment {
         queryStatuses();
     }
 
+    //TODO change query statuses to only update the one new status instead of reloading all statuses
     //gets all statuses from Parse db
     private void queryStatuses() {
         ParseQuery<Status> query = ParseQuery.getQuery(Status.class);

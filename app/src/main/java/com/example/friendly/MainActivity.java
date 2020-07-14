@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.example.friendly.fragments.HomeFragment;
 import com.example.friendly.fragments.ProfileFragment;
 import com.example.friendly.fragments.SearchFragment;
+import com.example.friendly.objects.Status;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
 
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
 
     private BottomNavigationView bottomNavigationView;
+    private Status status;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
