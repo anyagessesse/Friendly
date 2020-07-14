@@ -6,10 +6,7 @@
         android:id="@+id/action_home"
         android:icon="@drawable/ic_baseline_home_24"
         app:showAsAction="always" />
-    <item
-        android:id="@+id/action_post_status"
-        android:icon="@drawable/ic_baseline_add_comment_24"
-        app:showAsAction="always" />
+
     <item
         android:id="@+id/action_search"
         android:icon="@drawable/ic_baseline_search_24"

@@ -6,4 +6,10 @@
         android:id="@+id/miLogout"
         android:title="Log Out"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/miPostStatus"
+        android:icon="@drawable/ic_baseline_add_comment_24"
+        app:showAsAction="always" />
+
 </menu>

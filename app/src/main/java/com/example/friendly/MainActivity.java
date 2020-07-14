@@ -42,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
                         goLoginActivity();
                     }
                 }
+                if(item.getItemId() == R.id.miPostStatus){
+                    Intent intent = new Intent(MainActivity.this,StatusUpdateActivity.class);
+                    startActivity(intent);
+                }
                 return true;
             }
         });
@@ -55,11 +59,6 @@ public class MainActivity extends AppCompatActivity {
                 Fragment fragment;
                 switch (menuItem.getItemId()) {
                     case R.id.action_home:
-                        fragment = new HomeFragment();
-                        break;
-                    case R.id.action_post_status:
-                        //TODO change to post status activity
-                        Toast.makeText(MainActivity.this, "post status clicked", Toast.LENGTH_SHORT).show();
                         fragment = new HomeFragment();
                         break;
                     case R.id.action_search:
