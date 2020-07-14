@@ -17,7 +17,7 @@ import java.util.List;
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> {
 
     private final Context context;
-    private final List<ParseUser> users;
+    private List<ParseUser> users;
 
     public UsersAdapter(Context context, List<ParseUser> users) {
         this.context = context;
@@ -40,6 +40,11 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
     @Override
     public int getItemCount() {
         return users.size();
+    }
+
+    public void filterList(List<ParseUser> filteredUsers) {
+        this.users = filteredUsers;
+        notifyDataSetChanged();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{

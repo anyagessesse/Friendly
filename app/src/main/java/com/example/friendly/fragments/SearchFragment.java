@@ -8,10 +8,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.friendly.R;
 import com.example.friendly.UsersAdapter;
@@ -32,6 +36,8 @@ public class SearchFragment extends Fragment {
     private RecyclerView rvUsers;
     private UsersAdapter adapter;
     private List<ParseUser> allUsers;
+    private EditText etSearch;
+    private Button btnSearch;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -48,6 +54,9 @@ public class SearchFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        etSearch = view.findViewById(R.id.etSearch);
+        btnSearch = view.findViewById(R.id.btnSearch);
+
         rvUsers = view.findViewById(R.id.rvUsers);
         allUsers = new ArrayList<>();
         adapter = new UsersAdapter(getContext(), allUsers);
@@ -56,11 +65,42 @@ public class SearchFragment extends Fragment {
 
         queryUsers();
 
+        //set a listener to filter out users that don't match edittext search bar
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                filter(editable.toString());
+            }
+        });
+
+    }
+
+    private void filter(String text) {
+        //new arraylist of filtered data
+        List<ParseUser> filteredUsers = new ArrayList<>();
+
+        //add users to list if username matches
+        for (ParseUser user : allUsers) {
+            if (user.getUsername().toLowerCase().contains(text.toLowerCase())) {
+                filteredUsers.add(user);
+            }
+        }
+        //pass filtered list to the adapter
+        adapter.filterList(filteredUsers);
     }
 
     private void queryUsers() {
+        //gets all users in alphabetical order
         ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.addAscendingOrder("username");
+        query.addAscendingOrder("username");  //TODO set limit on number of users displayed and implement infinite scroll
         query.findInBackground(new FindCallback<ParseUser>() {
             public void done(List<ParseUser> users, ParseException e) {
                 if (e != null) {
@@ -68,9 +108,6 @@ public class SearchFragment extends Fragment {
                     return;
                 }
                 // The query was successful.
-                for (ParseUser user : users) {
-                    Log.i(TAG, "username: " + user.getUsername().toString());
-                }
                 allUsers.addAll(users);
                 adapter.notifyDataSetChanged();
             }
