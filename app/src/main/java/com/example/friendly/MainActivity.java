@@ -42,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
                         goLoginActivity();
                     }
                 }
-                if(item.getItemId() == R.id.miPostStatus){
-                    Intent intent = new Intent(MainActivity.this,StatusUpdateActivity.class);
+                if (item.getItemId() == R.id.miPostStatus) {
+                    Intent intent = new Intent(MainActivity.this, StatusUpdateActivity.class);
                     startActivity(intent);
                 }
                 return true;

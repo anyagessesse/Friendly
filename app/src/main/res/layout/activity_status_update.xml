@@ -8,12 +8,14 @@
 
     <EditText
         android:id="@+id/etDescription"
-        android:layout_width="288dp"
-        android:layout_height="124dp"
+        android:layout_width="293dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="68dp"
         android:ems="10"
         android:gravity="start|top"
+        android:hint="description..."
         android:inputType="textMultiLine"
+        android:maxLines="4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"

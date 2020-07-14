@@ -21,7 +21,7 @@ public class Status extends ParseObject {
         return getParseUser(KEY_USER);
     }
 
-    public void setParseUser(ParseUser user) {
+    public void setUser(ParseUser user) {
         put(KEY_USER, user);
     }
 }
