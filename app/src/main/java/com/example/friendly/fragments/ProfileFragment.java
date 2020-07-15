@@ -73,7 +73,7 @@ public class ProfileFragment extends Fragment {
         if (curUser.getParseFile("profilePic") != null) {
             Glide.with(view).load(curUser.getParseFile("profilePic").getUrl()).into(ivProfilePic);
 
-        } else{
+        } else {
             Glide.with(view).load(R.drawable.placeholder).into(ivProfilePic);
             ivProfilePic.setVisibility(View.VISIBLE);
         }

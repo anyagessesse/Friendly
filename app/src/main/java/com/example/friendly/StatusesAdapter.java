@@ -86,4 +86,16 @@ public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.ViewHo
             }
         }
     }
+
+    // Clean all elements of the recycler
+    public void clear() {
+        statuses.clear();
+        notifyDataSetChanged();
+    }
+
+    // Add a list of items -- change to type used
+    public void addAll(List<Status> list) {
+        statuses.addAll(list);
+        notifyDataSetChanged();
+    }
 }

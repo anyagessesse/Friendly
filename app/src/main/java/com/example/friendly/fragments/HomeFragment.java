@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +33,8 @@ public class HomeFragment extends Fragment {
     private RecyclerView rvStatuses;
     private StatusesAdapter adapter;
     private List<Status> allStatuses;
+    private SwipeRefreshLayout swipeContainer;
+    private int skip; //TODO to be used for infinite scroll later
 
     public HomeFragment() {
         // Required empty public constructor
@@ -47,6 +50,22 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // Lookup the swipe container view
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                skip = 0;
+                queryStatuses();
+                adapter.clear();
+                adapter.addAll(allStatuses);
+                swipeContainer.setRefreshing(false);
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(R.color.colorAccentDark);
 
         //set up recyclerview with all active statuses
         rvStatuses = view.findViewById(R.id.rvStatuses);

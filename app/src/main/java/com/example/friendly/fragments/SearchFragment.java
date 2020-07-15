@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -37,8 +38,10 @@ public class SearchFragment extends Fragment {
     private UsersAdapter adapter;
     private List<ParseUser> allUsers;
     private EditText etSearch;
-    private Button btnSearch; //TODO button currently does nothing, possibly remove or find use?
+    private Button btnSearch; //TODO button currently does nothing, possibly remove or find use? maybe use to query users that match from database
     private String searchText;
+    private SwipeRefreshLayout swipeContainer;
+    private int skip; //TODO to be used for infinite scroll later
 
     public SearchFragment() {
         // Required empty public constructor
@@ -55,7 +58,21 @@ public class SearchFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        searchText = "";
+        // Lookup the swipe container view
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                skip = 0;
+                queryUsers();
+                adapter.clear();
+                adapter.addAll(allUsers);
+                swipeContainer.setRefreshing(false);
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(R.color.colorAccentDark);
 
         etSearch = view.findViewById(R.id.etSearch);
         btnSearch = view.findViewById(R.id.btnSearch);
