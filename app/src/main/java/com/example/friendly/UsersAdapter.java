@@ -68,5 +68,18 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
                 Glide.with(context).load(user.getParseFile("profilePic").getUrl()).circleCrop().into(ivProfilePic);
             }
         }
+
+    }
+
+    // Clean all elements of the recycler
+    public void clear() {
+        users.clear();
+        notifyDataSetChanged();
+    }
+
+    // Add a list of posts
+    public void addAll(List<ParseUser> list) {
+        users.addAll(list);
+        notifyDataSetChanged();
     }
 }

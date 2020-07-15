@@ -38,6 +38,7 @@ public class SearchFragment extends Fragment {
     private List<ParseUser> allUsers;
     private EditText etSearch;
     private Button btnSearch; //TODO button currently does nothing, possibly remove or find use?
+    private String searchText;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -53,6 +54,8 @@ public class SearchFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        searchText = "";
 
         etSearch = view.findViewById(R.id.etSearch);
         btnSearch = view.findViewById(R.id.btnSearch);
@@ -77,10 +80,12 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                filter(editable.toString());
+                searchText = editable.toString();
+                filter(searchText);
+                //adapter.clear();  //TODO try being able to search through large database of users
+                //queryUsers();
             }
         });
-
     }
 
     private void filter(String text) {
@@ -100,7 +105,9 @@ public class SearchFragment extends Fragment {
     private void queryUsers() {
         //gets all users in alphabetical order
         ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.addAscendingOrder("username");  //TODO set limit on number of users displayed and implement infinite scroll
+        query.setLimit(20);
+        //query.whereContains("username",searchText);
+        query.addAscendingOrder("username");  //TODO implement infinite scroll of users
         query.findInBackground(new FindCallback<ParseUser>() {
             public void done(List<ParseUser> users, ParseException e) {
                 if (e != null) {
