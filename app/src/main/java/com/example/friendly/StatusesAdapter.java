@@ -1,6 +1,7 @@
 package com.example.friendly;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,7 @@ public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.ViewHo
         return statuses.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView tvUser;
         private TextView tvDescription;
@@ -56,6 +57,8 @@ public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.ViewHo
             tvUser = itemView.findViewById(R.id.tvUser);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
+
+            itemView.setOnClickListener(this);
         }
 
         public void bind(Status status) {
@@ -64,6 +67,22 @@ public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.ViewHo
 
             if (status.getUser().getParseFile("profilePic") != null) {
                 Glide.with(context).load(status.getUser().getParseFile("profilePic").getUrl()).circleCrop().into(ivProfilePic);
+            }
+        }
+
+        @Override
+        public void onClick(View view) {
+            //get item position and check if valid
+            int pos = getAdapterPosition();
+            if (pos != RecyclerView.NO_POSITION) {
+                //get status at this position
+                Status status = statuses.get(pos);
+                //create intent for the new activity
+                Intent intent = new Intent(context, StatusDetailActivity.class);
+                //send to detail view
+                intent.putExtra("status", status);
+                //show the activity
+                context.startActivity(intent);
             }
         }
     }
