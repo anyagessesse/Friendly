@@ -64,7 +64,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
 
         public void bind(ParseUser user) {
             tvUser.setText(user.getUsername());
-            if(user.getParseFile("profilePic") != null){
+            if (user.getParseFile("profilePic") != null) {
                 Glide.with(context).load(user.getParseFile("profilePic").getUrl()).circleCrop().into(ivProfilePic);
             }
         }

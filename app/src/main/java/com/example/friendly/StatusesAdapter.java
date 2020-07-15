@@ -62,7 +62,7 @@ public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.ViewHo
             tvUser.setText(status.getUser().getUsername());
             tvDescription.setText(status.getDescription());
 
-            if(status.getUser().getParseFile("profilePic") != null){
+            if (status.getUser().getParseFile("profilePic") != null) {
                 Glide.with(context).load(status.getUser().getParseFile("profilePic").getUrl()).circleCrop().into(ivProfilePic);
             }
         }
