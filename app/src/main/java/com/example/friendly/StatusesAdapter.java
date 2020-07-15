@@ -4,11 +4,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.friendly.objects.Status;
 
 import java.util.List;
@@ -46,17 +48,23 @@ public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.ViewHo
 
         private TextView tvUser;
         private TextView tvDescription;
+        private ImageView ivProfilePic;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             tvUser = itemView.findViewById(R.id.tvUser);
             tvDescription = itemView.findViewById(R.id.tvDescription);
+            ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
         }
 
         public void bind(Status status) {
             tvUser.setText(status.getUser().getUsername());
             tvDescription.setText(status.getDescription());
+
+            if(status.getUser().getParseFile("profilePic") != null){
+                Glide.with(context).load(status.getUser().getParseFile("profilePic").getUrl()).circleCrop().into(ivProfilePic);
+            }
         }
     }
 }

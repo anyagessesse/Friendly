@@ -10,23 +10,35 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:layout_marginStart="16dp"
         android:textColor="@android:color/black"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ivProfilePic"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.491"
         tools:text="anyagess" />
 
     <TextView
         android:id="@+id/tvDescription"
-        android:layout_width="285dp"
-        android:layout_height="21dp"
+        android:layout_width="226dp"
+        android:layout_height="19dp"
         android:layout_margin="16dp"
         android:layout_marginEnd="28dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tvUser"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.468"
         tools:text="decription" />
+
+    <ImageView
+        android:id="@+id/ivProfilePic"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="16dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
 </androidx.constraintlayout.widget.ConstraintLayout>
