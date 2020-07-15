@@ -16,6 +16,9 @@ import com.parse.ParseUser;
 
 import java.util.List;
 
+/**
+ * adapter of users for recyclerview in the search fragment
+ */
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> {
 
     private final Context context;
@@ -51,6 +54,9 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
+    /**
+     * allows eachs user's details to be binded to the item_user layout
+     */
     class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView tvUser;

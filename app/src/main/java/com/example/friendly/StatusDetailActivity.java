@@ -12,6 +12,9 @@ import com.example.friendly.objects.Status;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * activity used to show a more detailed view of a status
+ */
 public class StatusDetailActivity extends AppCompatActivity {
     public static final String TAG = "StatusDetailActivity";
 
@@ -37,7 +40,7 @@ public class StatusDetailActivity extends AppCompatActivity {
         //fill detail view with data from status
         tvUser.setText(status.getUser().getUsername());
         tvDescription.setText(status.getDescription());
-        if(status.getUser().getParseFile("profilePic")!=null){
+        if (status.getUser().getParseFile("profilePic") != null) {
             Glide.with(this).load(status.getUser().getParseFile("profilePic").getUrl()).circleCrop().into(ivProfilePic);
         }
         //change format of date created

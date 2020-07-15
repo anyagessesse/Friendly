@@ -16,6 +16,9 @@ import com.example.friendly.objects.Status;
 
 import java.util.List;
 
+/**
+ * adapter of statuses for recyclerview in the home fragment
+ */
 public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.ViewHolder> {
 
     private final Context context;
@@ -45,6 +48,9 @@ public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.ViewHo
         return statuses.size();
     }
 
+    /**
+     * allows eachs status' details to be binded to the item_status layout
+     */
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView tvUser;

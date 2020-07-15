@@ -1,7 +1,5 @@
 package com.example.friendly;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,14 +7,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.friendly.fragments.HomeFragment;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.friendly.objects.Status;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import java.util.List;
-
+/**
+ * activity that can be used to create or update a status
+ */
 public class StatusUpdateActivity extends AppCompatActivity {
     private static final String TAG = "StatusUpdateActivity";
 

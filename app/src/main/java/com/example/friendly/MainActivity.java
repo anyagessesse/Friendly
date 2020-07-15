@@ -19,6 +19,9 @@ import com.example.friendly.objects.Status;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
 
+/**
+ * main activity of the app, contains bottom nativation, toolbar, and fragments
+ */
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
 

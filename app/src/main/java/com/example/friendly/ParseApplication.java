@@ -6,6 +6,9 @@ import com.example.friendly.objects.Status;
 import com.parse.Parse;
 import com.parse.ParseObject;
 
+/**
+ * attaches the Parse database to the app
+ */
 public class ParseApplication extends Application {
 
     @Override

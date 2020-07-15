@@ -15,6 +15,9 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
+/**
+ * login page activity, allows user to login with a previously created account, or sign up for a new account
+ */
 public class LoginActivity extends AppCompatActivity {
     public static final String TAG = "LoginActivity";
 

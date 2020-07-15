@@ -30,6 +30,8 @@ import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
+ * <p>
+ * Fragment that allows user to search for other users and add them as friends
  */
 public class SearchFragment extends Fragment {
     public static final String TAG = "SearchFragment";

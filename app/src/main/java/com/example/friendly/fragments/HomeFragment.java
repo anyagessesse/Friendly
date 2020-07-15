@@ -26,6 +26,8 @@ import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
+ * <p>
+ * Fragment that displays active statuses of user's friends
  */
 public class HomeFragment extends Fragment {
     public static final String TAG = "HomeFragment";

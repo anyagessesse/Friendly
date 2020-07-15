@@ -4,6 +4,9 @@ import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
+/**
+ * Status object that pulls from Parse database for the status' user and description
+ */
 @ParseClassName("Status")
 public class Status extends ParseObject {
     public static final String KEY_USER = "user";

@@ -38,6 +38,8 @@ import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
+ * <p>
+ * Fragment that displays profile of logged in user
  */
 public class ProfileFragment extends Fragment {
     public static final String TAG = "ProfileFragment";
