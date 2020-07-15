@@ -66,9 +66,11 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
             tvUser.setText(user.getUsername());
             if (user.getParseFile("profilePic") != null) {
                 Glide.with(context).load(user.getParseFile("profilePic").getUrl()).circleCrop().into(ivProfilePic);
+            } else {
+                //use placeholder image if user doesn't have a profile picture yet
+                Glide.with(context).load(R.drawable.placeholder).circleCrop().into(ivProfilePic);
             }
         }
-
     }
 
     // Clean all elements of the recycler

@@ -68,13 +68,13 @@ public class ProfileFragment extends Fragment {
         ivProfilePic = view.findViewById(R.id.ivProfilePic);
         btnChangeProfilePic = view.findViewById(R.id.btnChangeProfilePic);
 
-        //put user details into profile layout
-        ivProfilePic.setVisibility(View.GONE);  //TODO have default profile picture?
-
         //add user data to profile page
         ParseUser curUser = ParseUser.getCurrentUser();
         if (curUser.getParseFile("profilePic") != null) {
             Glide.with(view).load(curUser.getParseFile("profilePic").getUrl()).into(ivProfilePic);
+
+        } else{
+            Glide.with(view).load(R.drawable.placeholder).into(ivProfilePic);
             ivProfilePic.setVisibility(View.VISIBLE);
         }
         tvUser.setText(curUser.getUsername());
