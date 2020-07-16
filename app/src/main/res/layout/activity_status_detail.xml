@@ -8,34 +8,31 @@
     tools:context=".StatusDetailActivity">
 
     <TextView
-        android:id="@+id/tvUser"
+        android:id="@+id/text_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
         android:textColor="@android:color/black"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/tvDescription"
-        app:layout_constraintStart_toEndOf="@+id/ivProfilePic"
+        app:layout_constraintStart_toEndOf="@+id/image_profile_pic"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.65"
         tools:text="anyagess" />
 
     <TextView
-        android:id="@+id/tvDescription"
-        android:layout_width="308dp"
-        android:layout_height="72dp"
-        android:layout_margin="16dp"
+        android:id="@+id/text_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/ivProfilePic"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.068"
+        app:layout_constraintStart_toEndOf="@+id/image_profile_pic"
+        app:layout_constraintTop_toBottomOf="@+id/text_username"
         tools:text="decription" />
 
     <ImageView
-        android:id="@+id/ivProfilePic"
+        android:id="@+id/image_profile_pic"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_margin="16dp"
@@ -49,15 +46,13 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/tvDate"
+        android:id="@+id/text_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
-        android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.926"
-        app:layout_constraintStart_toEndOf="@+id/tvUser"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="4 hours ago" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

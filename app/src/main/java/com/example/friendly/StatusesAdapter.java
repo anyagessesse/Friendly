@@ -60,9 +60,9 @@ public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.ViewHo
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            tvUser = itemView.findViewById(R.id.tvUser);
-            tvDescription = itemView.findViewById(R.id.tvDescription);
-            ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
+            tvUser = itemView.findViewById(R.id.text_username);
+            tvDescription = itemView.findViewById(R.id.text_description);
+            ivProfilePic = itemView.findViewById(R.id.image_profile_pic);
 
             itemView.setOnClickListener(this);
         }

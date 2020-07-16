@@ -10,12 +10,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.example.friendly.fragments.HomeFragment;
 import com.example.friendly.fragments.ProfileFragment;
 import com.example.friendly.fragments.SearchFragment;
-import com.example.friendly.objects.Status;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
 
@@ -41,14 +39,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 //logout when user presses "log out" button
-                if (item.getItemId() == R.id.miLogout) {
+                if (item.getItemId() == R.id.logout) {
                     ParseUser.logOut();
                     if (ParseUser.getCurrentUser() == null) {
                         goLoginActivity();
                     }
                 }
                 //goes to StatusUpdateActivity when user presses "post status" button
-                if (item.getItemId() == R.id.miPostStatus) {
+                if (item.getItemId() == R.id.post_status) {
                     Intent intent = new Intent(MainActivity.this, StatusUpdateActivity.class);
                     startActivity(intent);
                 }
@@ -75,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                         fragment = new ProfileFragment();
                         break;
                 }
-                fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 return true;
             }
         });

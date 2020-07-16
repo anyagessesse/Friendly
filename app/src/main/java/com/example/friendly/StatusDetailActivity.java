@@ -29,10 +29,10 @@ public class StatusDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_status_detail);
 
-        ivProfilePic = findViewById(R.id.ivProfilePic);
-        tvUser = findViewById(R.id.tvUser);
-        tvDescription = findViewById(R.id.tvDescription);
-        tvDate = findViewById(R.id.tvDate);
+        ivProfilePic = findViewById(R.id.image_profile_pic);
+        tvUser = findViewById(R.id.text_username);
+        tvDescription = findViewById(R.id.text_description);
+        tvDate = findViewById(R.id.text_date);
 
         //get status clicked on
         status = (Status) getIntent().getParcelableExtra("status");

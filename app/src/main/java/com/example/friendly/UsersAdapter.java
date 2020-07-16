@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.friendly.objects.Status;
 import com.parse.ParseUser;
 
 import java.util.List;
@@ -23,7 +22,6 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
 
     private final Context context;
     private List<ParseUser> users;
-
 
     public UsersAdapter(Context context, List<ParseUser> users) {
         this.context = context;
@@ -65,8 +63,8 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            tvUser = itemView.findViewById(R.id.tvUser);
-            ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
+            tvUser = itemView.findViewById(R.id.text_username);
+            ivProfilePic = itemView.findViewById(R.id.image_profile_pic);
         }
 
         public void bind(ParseUser user) {

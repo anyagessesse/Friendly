@@ -13,4 +13,6 @@
     <string name="description">description...</string>
     <string name="search2">Search...</string>
     <string name="end_time">End Time</string>
+    <string name="log_out">Log Out</string>
+    <string name="change_profile_picture">change profile picture</string>
 </resources>

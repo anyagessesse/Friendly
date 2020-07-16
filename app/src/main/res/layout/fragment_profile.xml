@@ -8,19 +8,18 @@
     tools:context=".fragments.ProfileFragment">
 
     <ImageView
-        android:id="@+id/ivProfilePic"
+        android:id="@+id/image_profile_pic"
         android:layout_width="180dp"
         android:layout_height="180dp"
         android:layout_marginTop="24dp"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/tvUser"
+        android:id="@+id/text_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -29,18 +28,17 @@
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnChangeProfilePic"
+        app:layout_constraintTop_toBottomOf="@+id/button_change_profile_pic"
         tools:text="username" />
 
     <Button
-        android:id="@+id/btnChangeProfilePic"
+        android:id="@+id/button_change_profile_pic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="change profile picture"
+        android:text="@string/change_profile_picture"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivProfilePic" />
+        app:layout_constraintTop_toBottomOf="@+id/image_profile_pic" />
 </androidx.constraintlayout.widget.ConstraintLayout>

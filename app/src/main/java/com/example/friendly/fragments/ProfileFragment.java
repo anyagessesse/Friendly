@@ -1,7 +1,6 @@
 package com.example.friendly.fragments;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -22,10 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.example.friendly.R;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -66,9 +61,9 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        tvUser = view.findViewById(R.id.tvUser);
-        ivProfilePic = view.findViewById(R.id.ivProfilePic);
-        btnChangeProfilePic = view.findViewById(R.id.btnChangeProfilePic);
+        tvUser = view.findViewById(R.id.text_username);
+        ivProfilePic = view.findViewById(R.id.image_profile_pic);
+        btnChangeProfilePic = view.findViewById(R.id.button_change_profile_pic);
 
         //add user data to profile page
         ParseUser curUser = ParseUser.getCurrentUser();

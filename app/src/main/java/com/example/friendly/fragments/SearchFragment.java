@@ -61,7 +61,7 @@ public class SearchFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Lookup the swipe container view
-        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
         // Setup refresh listener which triggers new data loading
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -76,11 +76,11 @@ public class SearchFragment extends Fragment {
         // Configure the refreshing colors
         swipeContainer.setColorSchemeResources(R.color.colorAccentDark);
 
-        etSearch = view.findViewById(R.id.etSearch);
-        btnSearch = view.findViewById(R.id.btnSearch);
+        etSearch = view.findViewById(R.id.text_search);
+        btnSearch = view.findViewById(R.id.button_search);
 
         //set up recyclerview of users to search from
-        rvUsers = view.findViewById(R.id.rvUsers);
+        rvUsers = view.findViewById(R.id.recyclerview_users);
         allUsers = new ArrayList<>();
         adapter = new UsersAdapter(getContext(), allUsers);
         rvUsers.setAdapter(adapter);

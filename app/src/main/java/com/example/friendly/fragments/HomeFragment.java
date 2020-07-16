@@ -54,7 +54,7 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Lookup the swipe container view
-        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
         // Setup refresh listener which triggers new data loading
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -70,7 +70,7 @@ public class HomeFragment extends Fragment {
         swipeContainer.setColorSchemeResources(R.color.colorAccentDark);
 
         //set up recyclerview with all active statuses
-        rvStatuses = view.findViewById(R.id.rvStatuses);
+        rvStatuses = view.findViewById(R.id.recyclerview_statuses);
         allStatuses = new ArrayList<>();
         adapter = new StatusesAdapter(getContext(), allStatuses);
         rvStatuses.setAdapter(adapter);
