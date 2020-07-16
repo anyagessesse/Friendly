@@ -55,7 +55,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
     }
 
     /**
-     * allows eachs user's details to be binded to the item_user layout
+     * allows each user's details to be binded to the item_user layout
      */
     class ViewHolder extends RecyclerView.ViewHolder {
 

@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void signupUser(String username, String password) {
         //creates a new ParseUser with given username and password
-        ParseUser user = new ParseUser();
+        final ParseUser user = new ParseUser();
         user.setUsername(username);
         user.setPassword(password);
 

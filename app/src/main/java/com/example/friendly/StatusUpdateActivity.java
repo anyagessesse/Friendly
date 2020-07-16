@@ -6,7 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,8 +15,7 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -27,17 +26,17 @@ public class StatusUpdateActivity extends AppCompatActivity {
 
     private EditText etDescription;
     private Button btnPostStatus;
-    private EditText text_timeStart;
     private Status newStatus;
+    private TimePicker timePicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_status_update);
 
-        etDescription = findViewById(R.id.etDescription);
-        btnPostStatus = findViewById(R.id.btnPostStatus);
-        text_timeStart = findViewById(R.id.text_timeStart);
+        etDescription = findViewById(R.id.text_description);
+        btnPostStatus = findViewById(R.id.button_post_status);
+        timePicker = (TimePicker) findViewById(R.id.time_picker);
 
         //adds status to db and navigates back to home fragment
         btnPostStatus.setOnClickListener(new View.OnClickListener() {
@@ -45,16 +44,12 @@ public class StatusUpdateActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String description = etDescription.getText().toString();
 
-                //parse the date to save in database
-                String text = text_timeStart.getText().toString();
-                DateFormat formatter = new SimpleDateFormat("hh:mm");
-                try {
-                    Date date = formatter.parse(text);
-                    saveStatus(description, ParseUser.getCurrentUser(),date);
-                } catch (java.text.ParseException e) {
-                    e.printStackTrace();
-                    Toast.makeText(StatusUpdateActivity.this, "you entered the time incorrectly :(", Toast.LENGTH_SHORT).show();  //TODO have a better message here or an easier way to enter time
-                }
+                // parse the date to save in database
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
+                cal.set(Calendar.MINUTE, timePicker.getCurrentMinute());
+                Date date = cal.getTime();
+                saveStatus(description, ParseUser.getCurrentUser(), date);
 
                 //go to home fragment to display statuses
                 Intent intent = new Intent(StatusUpdateActivity.this, MainActivity.class);
@@ -69,7 +64,7 @@ public class StatusUpdateActivity extends AppCompatActivity {
         newStatus = new Status();
         newStatus.setDescription(description);
         newStatus.setUser(currentUser);
-        newStatus.put("startTime",date);
+        newStatus.put("endTime", date);
 
         newStatus.saveInBackground(new SaveCallback() {
             @Override

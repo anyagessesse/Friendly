@@ -7,43 +7,48 @@
     tools:context=".StatusUpdateActivity">
 
     <EditText
-        android:id="@+id/etDescription"
+        android:id="@+id/text_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
         android:autofillHints=""
-        android:ems="10"
         android:gravity="start|top"
         android:hint="@string/description"
         android:inputType="textMultiLine"
         android:maxLines="4"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btnPostStatus"
+        android:id="@+id/button_post_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:layout_marginEnd="84dp"
+        android:layout_marginEnd="32dp"
         android:text="@string/post_status"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_timeStart" />
+        app:layout_constraintTop_toBottomOf="@+id/time_picker" />
 
-    <EditText
-        android:id="@+id/text_timeStart"
-        android:layout_width="154dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="36dp"
-        android:ems="10"
-        android:hint="start time"
-        android:inputType="time"
+    <TimePicker
+        android:id="@+id/time_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:timePickerMode="spinner"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.062"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etDescription" />
+        app:layout_constraintTop_toBottomOf="@+id/text_end_time" />
+
+    <TextView
+        android:id="@+id/text_end_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/end_time"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_description" />
 </androidx.constraintlayout.widget.ConstraintLayout>

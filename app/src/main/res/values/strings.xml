@@ -12,4 +12,5 @@
     <string name="sign_up">Sign Up</string>
     <string name="description">description...</string>
     <string name="search2">Search...</string>
+    <string name="end_time">End Time</string>
 </resources>
