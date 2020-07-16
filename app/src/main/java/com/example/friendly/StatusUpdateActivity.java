@@ -24,8 +24,8 @@ import java.util.Date;
 public class StatusUpdateActivity extends AppCompatActivity {
     private static final String TAG = "StatusUpdateActivity";
 
-    private EditText etDescription;
-    private Button btnPostStatus;
+    private EditText description;
+    private Button postStatusButton;
     private Status newStatus;
     private TimePicker timePicker;
 
@@ -34,22 +34,22 @@ public class StatusUpdateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_status_update);
 
-        etDescription = findViewById(R.id.text_description);
-        btnPostStatus = findViewById(R.id.button_post_status);
+        description = findViewById(R.id.text_description);
+        postStatusButton = findViewById(R.id.button_post_status);
         timePicker = (TimePicker) findViewById(R.id.time_picker);
 
         //adds status to db and navigates back to home fragment
-        btnPostStatus.setOnClickListener(new View.OnClickListener() {
+        postStatusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String description = etDescription.getText().toString();
+                String descriptionText = description.getText().toString();
 
                 // parse the date to save in database
                 Calendar cal = Calendar.getInstance();
                 cal.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
                 cal.set(Calendar.MINUTE, timePicker.getCurrentMinute());
                 Date date = cal.getTime();
-                saveStatus(description, ParseUser.getCurrentUser(), date);
+                saveStatus(descriptionText, ParseUser.getCurrentUser(), date);
 
                 //go to home fragment to display statuses
                 Intent intent = new Intent(StatusUpdateActivity.this, MainActivity.class);
@@ -76,7 +76,7 @@ public class StatusUpdateActivity extends AppCompatActivity {
                 }
                 //status successfully added to db
                 Log.i(TAG, "status save was successful!");
-                etDescription.setText("");
+                StatusUpdateActivity.this.description.setText("");
             }
         });
     }

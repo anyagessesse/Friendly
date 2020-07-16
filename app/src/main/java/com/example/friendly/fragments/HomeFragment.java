@@ -32,7 +32,7 @@ import java.util.List;
 public class HomeFragment extends Fragment {
     public static final String TAG = "HomeFragment";
 
-    private RecyclerView rvStatuses;
+    private RecyclerView recyclerviewStatuses;
     private StatusesAdapter adapter;
     private List<Status> allStatuses;
     private SwipeRefreshLayout swipeContainer;
@@ -70,11 +70,11 @@ public class HomeFragment extends Fragment {
         swipeContainer.setColorSchemeResources(R.color.colorAccentDark);
 
         //set up recyclerview with all active statuses
-        rvStatuses = view.findViewById(R.id.recyclerview_statuses);
+        recyclerviewStatuses = view.findViewById(R.id.recyclerview_statuses);
         allStatuses = new ArrayList<>();
         adapter = new StatusesAdapter(getContext(), allStatuses);
-        rvStatuses.setAdapter(adapter);
-        rvStatuses.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerviewStatuses.setAdapter(adapter);
+        recyclerviewStatuses.setLayoutManager(new LinearLayoutManager(getContext()));
         queryStatuses();
     }
 

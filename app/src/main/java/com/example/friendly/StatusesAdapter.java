@@ -53,29 +53,29 @@ public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.ViewHo
      */
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView tvUser;
-        private TextView tvDescription;
-        private ImageView ivProfilePic;
+        private TextView username;
+        private TextView description;
+        private ImageView profilePic;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            tvUser = itemView.findViewById(R.id.text_username);
-            tvDescription = itemView.findViewById(R.id.text_description);
-            ivProfilePic = itemView.findViewById(R.id.image_profile_pic);
+            username = itemView.findViewById(R.id.text_username);
+            description = itemView.findViewById(R.id.text_description);
+            profilePic = itemView.findViewById(R.id.image_profile_pic);
 
             itemView.setOnClickListener(this);
         }
 
         public void bind(Status status) {
-            tvUser.setText(status.getUser().getUsername());
-            tvDescription.setText(status.getDescription());
+            username.setText(status.getUser().getUsername());
+            description.setText(status.getDescription());
 
             if (status.getUser().getParseFile("profilePic") != null) {
-                Glide.with(context).load(status.getUser().getParseFile("profilePic").getUrl()).circleCrop().into(ivProfilePic);
+                Glide.with(context).load(status.getUser().getParseFile("profilePic").getUrl()).circleCrop().into(profilePic);
             } else {
                 //use placeholder image if user doesn't have a profile picture yet
-                Glide.with(context).load(R.drawable.placeholder).circleCrop().into(ivProfilePic);
+                Glide.with(context).load(R.drawable.placeholder).circleCrop().into(profilePic);
             }
         }
 

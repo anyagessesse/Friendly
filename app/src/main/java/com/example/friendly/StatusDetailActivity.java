@@ -18,10 +18,10 @@ import java.util.Date;
 public class StatusDetailActivity extends AppCompatActivity {
     public static final String TAG = "StatusDetailActivity";
 
-    private ImageView ivProfilePic;
-    private TextView tvUser;
-    private TextView tvDescription;
-    private TextView tvDate;
+    private ImageView profilePic;
+    private TextView username;
+    private TextView description;
+    private TextView date;
     private Status status;
 
     @Override
@@ -29,25 +29,25 @@ public class StatusDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_status_detail);
 
-        ivProfilePic = findViewById(R.id.image_profile_pic);
-        tvUser = findViewById(R.id.text_username);
-        tvDescription = findViewById(R.id.text_description);
-        tvDate = findViewById(R.id.text_date);
+        profilePic = findViewById(R.id.image_profile_pic);
+        username = findViewById(R.id.text_username);
+        description = findViewById(R.id.text_description);
+        date = findViewById(R.id.text_date);
 
         //get status clicked on
         status = (Status) getIntent().getParcelableExtra("status");
 
         //fill detail view with data from status
-        tvUser.setText(status.getUser().getUsername());
-        tvDescription.setText(status.getDescription());
+        username.setText(status.getUser().getUsername());
+        description.setText(status.getDescription());
         if (status.getUser().getParseFile("profilePic") != null) {
-            Glide.with(this).load(status.getUser().getParseFile("profilePic").getUrl()).circleCrop().into(ivProfilePic);
+            Glide.with(this).load(status.getUser().getParseFile("profilePic").getUrl()).circleCrop().into(profilePic);
         }
         //change format of date created
         SimpleDateFormat parser = new SimpleDateFormat("HH:mm EEE MMM d yyyy"); //TODO change time format to something better looking
-        Date date = status.getCreatedAt();
-        String formattedDate = parser.format(date);
-        tvDate.setText(formattedDate);
+        Date statusDate = status.getCreatedAt();
+        String formattedDate = parser.format(statusDate);
+        this.date.setText(formattedDate);
 
     }
 }

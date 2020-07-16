@@ -57,23 +57,23 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
      */
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView tvUser;
-        private ImageView ivProfilePic;
+        private TextView username;
+        private ImageView profilePic;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            tvUser = itemView.findViewById(R.id.text_username);
-            ivProfilePic = itemView.findViewById(R.id.image_profile_pic);
+            username = itemView.findViewById(R.id.text_username);
+            profilePic = itemView.findViewById(R.id.image_profile_pic);
         }
 
         public void bind(ParseUser user) {
-            tvUser.setText(user.getUsername());
+            username.setText(user.getUsername());
             if (user.getParseFile("profilePic") != null) {
-                Glide.with(context).load(user.getParseFile("profilePic").getUrl()).circleCrop().into(ivProfilePic);
+                Glide.with(context).load(user.getParseFile("profilePic").getUrl()).circleCrop().into(profilePic);
             } else {
                 //use placeholder image if user doesn't have a profile picture yet
-                Glide.with(context).load(R.drawable.placeholder).circleCrop().into(ivProfilePic);
+                Glide.with(context).load(R.drawable.placeholder).circleCrop().into(profilePic);
             }
         }
     }

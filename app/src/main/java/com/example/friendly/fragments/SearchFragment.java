@@ -36,11 +36,11 @@ import java.util.List;
 public class SearchFragment extends Fragment {
     public static final String TAG = "SearchFragment";
 
-    private RecyclerView rvUsers;
+    private RecyclerView recyclerviewUsers;
     private UsersAdapter adapter;
     private List<ParseUser> allUsers;
-    private EditText etSearch;
-    private Button btnSearch; //TODO button currently does nothing, possibly remove or find use? maybe use to query users that match from database
+    private EditText searchBar;
+    private Button searchButton; //TODO button currently does nothing, possibly remove or find use? maybe use to query users that match from database
     private String searchText;
     private SwipeRefreshLayout swipeContainer;
     private int skip; //TODO to be used for infinite scroll later
@@ -76,19 +76,19 @@ public class SearchFragment extends Fragment {
         // Configure the refreshing colors
         swipeContainer.setColorSchemeResources(R.color.colorAccentDark);
 
-        etSearch = view.findViewById(R.id.text_search);
-        btnSearch = view.findViewById(R.id.button_search);
+        searchBar = view.findViewById(R.id.text_search);
+        searchButton = view.findViewById(R.id.button_search);
 
         //set up recyclerview of users to search from
-        rvUsers = view.findViewById(R.id.recyclerview_users);
+        recyclerviewUsers = view.findViewById(R.id.recyclerview_users);
         allUsers = new ArrayList<>();
         adapter = new UsersAdapter(getContext(), allUsers);
-        rvUsers.setAdapter(adapter);
-        rvUsers.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerviewUsers.setAdapter(adapter);
+        recyclerviewUsers.setLayoutManager(new LinearLayoutManager(getContext()));
         queryUsers();
 
         //set a listener to filter out users that don't match edittext search bar
-        etSearch.addTextChangedListener(new TextWatcher() {
+        searchBar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }

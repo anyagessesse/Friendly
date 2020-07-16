@@ -21,10 +21,10 @@ import com.parse.SignUpCallback;
 public class LoginActivity extends AppCompatActivity {
     public static final String TAG = "LoginActivity";
 
-    private EditText etUsername;
-    private EditText etPassword;
-    private Button btnLogin;
-    private Button btnSignup;
+    private EditText username;
+    private EditText password;
+    private Button loginButton;
+    private Button signupButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,25 +36,25 @@ public class LoginActivity extends AppCompatActivity {
             goMainActivity();
         }
 
-        etUsername = findViewById(R.id.text_username);
-        etPassword = findViewById(R.id.text_password);
-        btnLogin = findViewById(R.id.button_login);
-        btnSignup = findViewById(R.id.button_signup);
+        username = findViewById(R.id.text_username);
+        password = findViewById(R.id.text_password);
+        loginButton = findViewById(R.id.button_login);
+        signupButton = findViewById(R.id.button_signup);
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String username = etUsername.getText().toString();
-                String password = etPassword.getText().toString();
+                String username = LoginActivity.this.username.getText().toString();
+                String password = LoginActivity.this.password.getText().toString();
                 loginUser(username, password);
             }
         });
 
-        btnSignup.setOnClickListener(new View.OnClickListener() {
+        signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String username = etUsername.getText().toString();
-                String password = etPassword.getText().toString();
+                String username = LoginActivity.this.username.getText().toString();
+                String password = LoginActivity.this.password.getText().toString();
                 signupUser(username, password);
             }
         });

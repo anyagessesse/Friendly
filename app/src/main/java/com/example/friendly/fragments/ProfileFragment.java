@@ -39,9 +39,9 @@ import static android.app.Activity.RESULT_OK;
 public class ProfileFragment extends Fragment {
     public static final String TAG = "ProfileFragment";
 
-    private TextView tvUser;
-    private ImageView ivProfilePic;
-    private Button btnChangeProfilePic;
+    private TextView username;
+    private ImageView profilePic;
+    private Button changeProfilePic;
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1046;
     private File photoFile;
     public String photoFileName = "photo.jpg";
@@ -61,24 +61,24 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        tvUser = view.findViewById(R.id.text_username);
-        ivProfilePic = view.findViewById(R.id.image_profile_pic);
-        btnChangeProfilePic = view.findViewById(R.id.button_change_profile_pic);
+        username = view.findViewById(R.id.text_username);
+        profilePic = view.findViewById(R.id.image_profile_pic);
+        changeProfilePic = view.findViewById(R.id.button_change_profile_pic);
 
         //add user data to profile page
         ParseUser curUser = ParseUser.getCurrentUser();
         if (curUser.getParseFile("profilePic") != null) {
-            Glide.with(view).load(curUser.getParseFile("profilePic").getUrl()).into(ivProfilePic);
+            Glide.with(view).load(curUser.getParseFile("profilePic").getUrl()).into(profilePic);
 
         } else {
-            Glide.with(view).load(R.drawable.placeholder).into(ivProfilePic);
-            ivProfilePic.setVisibility(View.VISIBLE);
+            Glide.with(view).load(R.drawable.placeholder).into(profilePic);
+            profilePic.setVisibility(View.VISIBLE);
         }
-        tvUser.setText(curUser.getUsername());
+        username.setText(curUser.getUsername());
         //TODO add recyclerview of friends
 
         //take new profile picture with camera
-        btnChangeProfilePic.setOnClickListener(new View.OnClickListener() {
+        changeProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 launchCamera();  //TODO make loading bar while new profile pic loads
