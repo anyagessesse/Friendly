@@ -73,6 +73,9 @@ public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.ViewHo
 
             if (status.getUser().getParseFile("profilePic") != null) {
                 Glide.with(context).load(status.getUser().getParseFile("profilePic").getUrl()).circleCrop().into(ivProfilePic);
+            } else {
+                //use placeholder image if user doesn't have a profile picture yet
+                Glide.with(context).load(R.drawable.placeholder).circleCrop().into(ivProfilePic);
             }
         }
 
