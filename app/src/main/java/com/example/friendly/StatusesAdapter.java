@@ -2,6 +2,7 @@ package com.example.friendly;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.friendly.objects.Status;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * adapter of statuses for recyclerview in the home fragment
@@ -56,6 +60,7 @@ public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.ViewHo
         private TextView username;
         private TextView description;
         private ImageView profilePic;
+        private TextView relativeDate;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -63,6 +68,7 @@ public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.ViewHo
             username = itemView.findViewById(R.id.text_username);
             description = itemView.findViewById(R.id.text_description);
             profilePic = itemView.findViewById(R.id.image_profile_pic);
+            relativeDate = itemView.findViewById(R.id.text_relative_date);
 
             itemView.setOnClickListener(this);
         }
@@ -71,12 +77,17 @@ public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.ViewHo
             username.setText(status.getUser().getUsername());
             description.setText(status.getDescription());
 
+            //load profile image
             if (status.getUser().getParseFile("profilePic") != null) {
                 Glide.with(context).load(status.getUser().getParseFile("profilePic").getUrl()).circleCrop().into(profilePic);
             } else {
                 //use placeholder image if user doesn't have a profile picture yet
                 Glide.with(context).load(R.drawable.placeholder).circleCrop().into(profilePic);
             }
+
+            //load relative date
+            String date = getRelativeTimeAgo(status.getCreatedAt().toString());
+            relativeDate.setText(date);
         }
 
         @Override
@@ -106,5 +117,23 @@ public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.ViewHo
     public void addAll(List<Status> list) {
         statuses.addAll(list);
         notifyDataSetChanged();
+    }
+
+    // getRelativeTimeAgo("Mon Apr 01 21:16:23 +0000 2014");
+    public String getRelativeTimeAgo(String rawJsonDate) {
+        String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+        SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
+        sf.setLenient(true);
+
+        String relativeDate = "";
+        try {
+            long dateMillis = sf.parse(rawJsonDate).getTime();
+            relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
+                    System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return relativeDate;
     }
 }
