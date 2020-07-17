@@ -126,8 +126,8 @@ public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.ViewHo
     }
 
     public String getRelativeTimeAgo(String rawJsonDate) {
-        String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
-        SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
+        String format = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+        SimpleDateFormat sf = new SimpleDateFormat(format, Locale.ENGLISH);
         sf.setLenient(true);
 
         try {
