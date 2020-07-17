@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_medium">16dp</dimen>
+    <dimen name="margin_medium2">24dp</dimen>
+    <dimen name="margin_large">32dp</dimen>
+
+    <dimen name="profile_pic_small">40dp</dimen>
+    <dimen name="profile_pic_large">180dp</dimen>
+
+    <dimen name="card_elevation">8dp</dimen>
+    <dimen name="card_corner_radius">16dp</dimen>
+</resources>
