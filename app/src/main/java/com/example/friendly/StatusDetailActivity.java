@@ -1,6 +1,7 @@
 package com.example.friendly;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,6 +24,7 @@ public class StatusDetailActivity extends AppCompatActivity {
     private TextView description;
     private TextView date;
     private Status status;
+    private TextView timeRange;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,7 @@ public class StatusDetailActivity extends AppCompatActivity {
         username = findViewById(R.id.text_username);
         description = findViewById(R.id.text_description);
         date = findViewById(R.id.text_date);
+        timeRange = findViewById(R.id.text_time_range);
 
         //get status clicked on
         status = (Status) getIntent().getParcelableExtra("status");
@@ -44,10 +47,19 @@ public class StatusDetailActivity extends AppCompatActivity {
             Glide.with(this).load(status.getUser().getParseFile("profilePic").getUrl()).circleCrop().into(profilePic);
         }
         //change format of date created
-        SimpleDateFormat parser = new SimpleDateFormat("HH:mm EEE MMM d yyyy"); //TODO change time format to something better looking
+        SimpleDateFormat parser = new SimpleDateFormat("h:mm a EEE, MMM d, yyyy"); //TODO change time format to something better looking
         Date statusDate = status.getCreatedAt();
         String formattedDate = parser.format(statusDate);
         this.date.setText(formattedDate);
+
+        // add time range if end time is specified
+        if (status.getDate("endTime") != null) {
+            SimpleDateFormat parserEndTime = new SimpleDateFormat("h:mm a");
+            Date endTime = status.getDate("endTime");
+            String formattedEndTime = parserEndTime.format(endTime);
+            timeRange.setVisibility(View.VISIBLE);
+            timeRange.setText("Now - " + formattedEndTime);
+        }
 
     }
 }

@@ -28,7 +28,7 @@
         android:layout_marginEnd="@dimen/margin_medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/image_profile_pic"
-        app:layout_constraintTop_toBottomOf="@+id/text_username"
+        app:layout_constraintTop_toBottomOf="@+id/text_time_range"
         tools:text="decription" />
 
     <ImageView
@@ -52,5 +52,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="4 hours ago" />
+
+    <TextView
+        android:id="@+id/text_time_range"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_medium"
+        android:layout_marginTop="@dimen/margin_small"
+        android:textSize="12sp"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@+id/image_profile_pic"
+        app:layout_constraintTop_toBottomOf="@+id/text_username"
+        tools:text="now-4:00pm" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -139,6 +139,7 @@ public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.ViewHo
                 return "just now";
             } else if (diff < 50 * MINUTE_MILLIS) {
                 return diff / MINUTE_MILLIS + " m";
+
             } else if (diff < 24 * HOUR_MILLIS) {
                 return diff / HOUR_MILLIS + " h";
             } else {
