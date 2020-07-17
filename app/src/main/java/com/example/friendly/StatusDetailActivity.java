@@ -47,7 +47,7 @@ public class StatusDetailActivity extends AppCompatActivity {
             Glide.with(this).load(status.getUser().getParseFile("profilePic").getUrl()).circleCrop().into(profilePic);
         }
         //change format of date created
-        SimpleDateFormat parser = new SimpleDateFormat("h:mm a EEE, MMM d, yyyy"); //TODO change time format to something better looking
+        SimpleDateFormat parser = new SimpleDateFormat("MMM d, yyyy"); //TODO change time format to something better looking
         Date statusDate = status.getCreatedAt();
         String formattedDate = parser.format(statusDate);
         this.date.setText(formattedDate);

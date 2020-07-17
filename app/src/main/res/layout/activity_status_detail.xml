@@ -51,7 +51,7 @@
         android:layout_marginEnd="@dimen/margin_medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="4 hours ago" />
+        tools:text="Jul 17, 2020" />
 
     <TextView
         android:id="@+id/text_time_range"
