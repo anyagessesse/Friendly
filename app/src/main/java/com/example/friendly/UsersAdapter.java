@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -59,12 +60,21 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
 
         private TextView username;
         private ImageView profilePic;
+        private ImageView addFriend;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             username = itemView.findViewById(R.id.text_username);
             profilePic = itemView.findViewById(R.id.image_profile_pic);
+            addFriend = itemView.findViewById(R.id.image_add_friend);
+
+            addFriend.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    addFriend.setActivated(!addFriend.isActivated());
+                }
+            });
         }
 
         public void bind(ParseUser user) {
