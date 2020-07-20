@@ -1,10 +1,9 @@
-package com.example.friendly;
+package com.example.friendly.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,32 +11,35 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.friendly.R;
+import com.parse.ParseException;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * adapter of users for recyclerview in the search fragment
  */
-public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> {
+public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
 
     private final Context context;
     private List<ParseUser> users;
 
-    public UsersAdapter(Context context, List<ParseUser> users) {
+    public FriendsAdapter(Context context, List<ParseUser> users) {
         this.context = context;
         this.users = users;
     }
 
     @NonNull
     @Override
-    public UsersAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public FriendsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_user, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull UsersAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull FriendsAdapter.ViewHolder holder, int position) {
         //bind each user to item_user layout
         ParseUser user = users.get(position);
         holder.bind(user);
@@ -48,16 +50,12 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         return users.size();
     }
 
-    public void filterList(List<ParseUser> filteredUsers) {
-        this.users = filteredUsers;
-        notifyDataSetChanged();
-    }
-
     /**
      * allows each user's details to be binded to the item_user layout
      */
     class ViewHolder extends RecyclerView.ViewHolder {
 
+        private ParseUser itemUser;
         private TextView username;
         private ImageView profilePic;
         private ImageView addFriend;
@@ -72,13 +70,31 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
             addFriend.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    addFriend.setActivated(!addFriend.isActivated());
+                    //adds friend to friends list in Parse db
+                    if (!addFriend.isActivated()) {
+                        addFriend.setActivated(true);
+                        List<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
+                        if (friends == null) {
+                            friends = new ArrayList<>();
+                        }
+                        friends.add(itemUser);
+                        ParseUser.getCurrentUser().put("friends", friends);
+                        ParseUser.getCurrentUser().saveInBackground();
+                    } else {
+                        // possibly remove friend here
+                        //addFriend.setActivated(false);
+                    }
                 }
             });
         }
 
         public void bind(ParseUser user) {
-            username.setText(user.getUsername());
+            itemUser = user;
+            try {
+                username.setText(user.fetchIfNeeded().getUsername());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             if (user.getParseFile("profilePic") != null) {
                 Glide.with(context).load(user.getParseFile("profilePic").getUrl()).circleCrop().into(profilePic);
             } else {

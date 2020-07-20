@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.friendly.R;
-import com.example.friendly.StatusesAdapter;
+import com.example.friendly.adapters.StatusesAdapter;
 import com.example.friendly.objects.Status;
 import com.parse.FindCallback;
 import com.parse.ParseException;

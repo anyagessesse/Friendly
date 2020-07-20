@@ -8,6 +8,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -22,12 +25,18 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.friendly.R;
+import com.example.friendly.adapters.FriendsAdapter;
+import com.example.friendly.adapters.UsersAdapter;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -42,6 +51,9 @@ public class ProfileFragment extends Fragment {
     private TextView username;
     private ImageView profilePic;
     private Button changeProfilePic;
+    private RecyclerView recyclerviewFriends;
+    private FriendsAdapter adapter;
+    private List<ParseUser> allFriends;
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1046;
     private File photoFile;
     public String photoFileName = "photo.jpg";
@@ -69,13 +81,19 @@ public class ProfileFragment extends Fragment {
         ParseUser curUser = ParseUser.getCurrentUser();
         if (curUser.getParseFile("profilePic") != null) {
             Glide.with(view).load(curUser.getParseFile("profilePic").getUrl()).into(profilePic);
-
         } else {
             Glide.with(view).load(R.drawable.placeholder).into(profilePic);
             profilePic.setVisibility(View.VISIBLE);
         }
         username.setText(curUser.getUsername());
-        //TODO add recyclerview of friends
+
+        //set up recyclerview of friends
+        recyclerviewFriends = view.findViewById(R.id.recyclerview_friends);
+        allFriends = new ArrayList<>();
+        adapter = new FriendsAdapter(getContext(), allFriends);
+        recyclerviewFriends.setAdapter(adapter);
+        recyclerviewFriends.setLayoutManager(new LinearLayoutManager(getContext()));
+        queryFriends();
 
         //take new profile picture with camera
         changeProfilePic.setOnClickListener(new View.OnClickListener() {
@@ -84,6 +102,14 @@ public class ProfileFragment extends Fragment {
                 launchCamera();  //TODO make loading bar while new profile pic loads
             }
         });
+    }
+
+    private void queryFriends() {
+        //gets all users in friends array
+        if (ParseUser.getCurrentUser().getList("friends") != null) {
+            allFriends.addAll(ParseUser.getCurrentUser().<ParseUser>getList("friends"));
+            adapter.notifyDataSetChanged();
+        }
     }
 
     private void launchCamera() {

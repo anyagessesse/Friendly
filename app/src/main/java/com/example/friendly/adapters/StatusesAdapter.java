@@ -1,8 +1,7 @@
-package com.example.friendly;
+package com.example.friendly.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.friendly.R;
+import com.example.friendly.StatusDetailActivity;
 import com.example.friendly.objects.Status;
 
 import java.text.ParseException;

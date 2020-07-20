@@ -19,7 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.friendly.R;
-import com.example.friendly.UsersAdapter;
+import com.example.friendly.adapters.UsersAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -66,7 +66,7 @@ public class SearchFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                skip = 0;
+                //skip = 0;
                 queryUsers();
                 adapter.clear();
                 adapter.addAll(allUsers);
