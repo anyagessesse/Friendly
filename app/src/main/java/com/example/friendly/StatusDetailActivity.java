@@ -25,6 +25,7 @@ public class StatusDetailActivity extends AppCompatActivity {
     private TextView date;
     private Status status;
     private TextView timeRange;
+    private TextView location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,7 @@ public class StatusDetailActivity extends AppCompatActivity {
         description = findViewById(R.id.text_description);
         date = findViewById(R.id.text_date);
         timeRange = findViewById(R.id.text_time_range);
+        location = findViewById(R.id.text_location);
 
         //get status clicked on
         status = (Status) getIntent().getParcelableExtra("status");
@@ -59,6 +61,14 @@ public class StatusDetailActivity extends AppCompatActivity {
             String formattedEndTime = parserEndTime.format(endTime);
             timeRange.setVisibility(View.VISIBLE);
             timeRange.setText("Now - " + formattedEndTime);
+        }
+
+        // add location if specified
+        if (status.getString("city") != null) {
+            String city = status.getString("city");
+            String state = status.getString("state");
+            location.setVisibility(View.VISIBLE);
+            location.setText(city + ", " + state);
         }
 
     }
