@@ -124,7 +124,6 @@ public class SearchFragment extends Fragment {
         //gets all users in alphabetical order
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.setLimit(20);
-        //query.whereContains("username",searchText);
         query.addAscendingOrder("username");  //TODO implement infinite scroll of users
         query.findInBackground(new FindCallback<ParseUser>() {
             public void done(List<ParseUser> users, ParseException e) {
@@ -142,13 +141,15 @@ public class SearchFragment extends Fragment {
                     }
                 }
 
-                //remove any friends from search list
+                //remove any friends from search list  TODO consider using hash table instead?
                 List<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
                 for (int j = 0; j < allUsers.size(); j++) {
                     for (int k = 0; k < friends.size(); k++) {
                         if (allUsers.get(j).getObjectId().equals(friends.get(k).getObjectId())) {
                             allUsers.remove(j);
-                            j--;
+                            if (j < allUsers.size() - 1 && j > 0) {
+                                j--;
+                            }
                         }
                     }
                 }

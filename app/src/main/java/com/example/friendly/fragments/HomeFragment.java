@@ -20,6 +20,7 @@ import com.example.friendly.objects.Status;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,8 +94,15 @@ public class HomeFragment extends Fragment {
                     Log.e(TAG, "issue getting posts", e);
                     return;
                 }
-                //query successful
-                allStatuses.addAll(statuses);
+                //query was successful
+                List<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
+                for (int i = 0; i < statuses.size(); i++) {
+                    for (int j = 0; j < friends.size(); j++) {
+                        if (statuses.get(i).getUser().getObjectId().equals(friends.get(j).getObjectId())){
+                            allStatuses.add(statuses.get(i));
+                        }
+                    }
+                }
                 adapter.notifyDataSetChanged();
             }
         });

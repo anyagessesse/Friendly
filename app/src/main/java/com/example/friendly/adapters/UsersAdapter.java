@@ -98,7 +98,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
             // remove friend from search list
             users.remove(getPosition());
             notifyItemRemoved(getPosition());
-            notifyItemRangeChanged(getPosition(),users.size());
+            notifyItemRangeChanged(getPosition(), users.size());
         }
     }
 

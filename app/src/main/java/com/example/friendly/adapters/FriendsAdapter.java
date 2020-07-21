@@ -52,7 +52,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     /**
      * allows each user's details to be binded to the item_user layout
      */
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ParseUser itemUser;
         private TextView username;
@@ -90,7 +90,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             //remove friend from friends list in db
             List<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
             for (int i = 0; i < friends.size(); i++) {
-                if (friends.get(i).getObjectId().equals(itemUser.getObjectId())){
+                if (friends.get(i).getObjectId().equals(itemUser.getObjectId())) {
                     friends.remove(i);
                 }
             }
@@ -100,7 +100,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             // remove friend from friends list on profile page
             users.remove(getPosition());
             notifyItemRemoved(getPosition());
-            notifyItemRangeChanged(getPosition(),users.size());
+            notifyItemRangeChanged(getPosition(), users.size());
         }
     }
 
