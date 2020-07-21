@@ -15,7 +15,6 @@ import com.example.friendly.R;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -53,39 +52,22 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     /**
      * allows each user's details to be binded to the item_user layout
      */
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private ParseUser itemUser;
         private TextView username;
         private ImageView profilePic;
         private ImageView addFriend;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull final View itemView) {
             super(itemView);
 
             username = itemView.findViewById(R.id.text_username);
             profilePic = itemView.findViewById(R.id.image_profile_pic);
             addFriend = itemView.findViewById(R.id.image_add_friend);
+            addFriend.setActivated(true);
 
-            addFriend.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //adds friend to friends list in Parse db
-                    if (!addFriend.isActivated()) {
-                        addFriend.setActivated(true);
-                        List<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
-                        if (friends == null) {
-                            friends = new ArrayList<>();
-                        }
-                        friends.add(itemUser);
-                        ParseUser.getCurrentUser().put("friends", friends);
-                        ParseUser.getCurrentUser().saveInBackground();
-                    } else {
-                        // possibly remove friend here
-                        //addFriend.setActivated(false);
-                    }
-                }
-            });
+            addFriend.setOnClickListener(this);
         }
 
         public void bind(ParseUser user) {
@@ -101,6 +83,24 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                 //use placeholder image if user doesn't have a profile picture yet
                 Glide.with(context).load(R.drawable.placeholder).circleCrop().into(profilePic);
             }
+        }
+
+        @Override
+        public void onClick(View view) {
+            //remove friend from friends list in db
+            List<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
+            for (int i = 0; i < friends.size(); i++) {
+                if (friends.get(i).getObjectId().equals(itemUser.getObjectId())){
+                    friends.remove(i);
+                }
+            }
+            ParseUser.getCurrentUser().put("friends", friends);
+            ParseUser.getCurrentUser().saveInBackground();
+
+            // remove friend from friends list on profile page
+            users.remove(getPosition());
+            notifyItemRemoved(getPosition());
+            notifyItemRangeChanged(getPosition(),users.size());
         }
     }
 

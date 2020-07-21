@@ -15,6 +15,8 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
+import java.util.ArrayList;
+
 /**
  * login page activity, allows user to login with a previously created account, or sign up for a new account
  */
@@ -65,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
         final ParseUser user = new ParseUser();
         user.setUsername(username);
         user.setPassword(password);
+        user.put("friends", new ArrayList<>());
 
         user.signUpInBackground(new SignUpCallback() {
             @Override

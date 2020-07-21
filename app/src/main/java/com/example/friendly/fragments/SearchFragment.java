@@ -1,14 +1,6 @@
 package com.example.friendly.fragments;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -17,6 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.friendly.R;
 import com.example.friendly.adapters.UsersAdapter;
@@ -136,6 +135,23 @@ public class SearchFragment extends Fragment {
                 }
                 // The query was successful.
                 allUsers.addAll(users);
+                // remove current user from search
+                for (int i = 0; i < allUsers.size(); i++) {
+                    if (allUsers.get(i).getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
+                        allUsers.remove(i);
+                    }
+                }
+
+                //remove any friends from search list
+                List<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
+                for (int j = 0; j < allUsers.size(); j++) {
+                    for (int k = 0; k < friends.size(); k++) {
+                        if (allUsers.get(j).getObjectId().equals(friends.get(k).getObjectId())) {
+                            allUsers.remove(j);
+                            j--;
+                        }
+                    }
+                }
                 adapter.notifyDataSetChanged();
             }
         });

@@ -14,7 +14,6 @@ import com.bumptech.glide.Glide;
 import com.example.friendly.R;
 import com.parse.ParseUser;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -57,7 +56,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
     /**
      * allows each user's details to be binded to the item_user layout
      */
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ParseUser itemUser;
         private TextView username;
@@ -71,25 +70,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
             profilePic = itemView.findViewById(R.id.image_profile_pic);
             addFriend = itemView.findViewById(R.id.image_add_friend);
 
-            addFriend.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //adds friend to friends list in Parse db
-                    if (!addFriend.isActivated()) {
-                        addFriend.setActivated(true);
-                        List<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
-                        if (friends == null) {
-                            friends = new ArrayList<>();
-                        }
-                        friends.add(itemUser);
-                        ParseUser.getCurrentUser().put("friends", friends);
-                        ParseUser.getCurrentUser().saveInBackground();
-                    } else {
-                        // possibly remove friend here
-                        //addFriend.setActivated(false);
-                    }
-                }
-            });
+            addFriend.setOnClickListener(this);
         }
 
         public void bind(ParseUser user) {
@@ -101,6 +82,23 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
                 //use placeholder image if user doesn't have a profile picture yet
                 Glide.with(context).load(R.drawable.placeholder).circleCrop().into(profilePic);
             }
+        }
+
+        @Override
+        public void onClick(View view) {
+            // adds friend to friends list in Parse db
+            List<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
+            //if (friends == null) {
+            //    friends = new ArrayList<>();  //TODO come back and delete this if signup code works
+            //}
+            friends.add(itemUser);
+            ParseUser.getCurrentUser().put("friends", friends);
+            ParseUser.getCurrentUser().saveInBackground();
+
+            // remove friend from search list
+            users.remove(getPosition());
+            notifyItemRemoved(getPosition());
+            notifyItemRangeChanged(getPosition(),users.size());
         }
     }
 
