@@ -98,7 +98,7 @@ public class HomeFragment extends Fragment {
                 List<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
                 for (int i = 0; i < statuses.size(); i++) {
                     for (int j = 0; j < friends.size(); j++) {
-                        if (statuses.get(i).getUser().getObjectId().equals(friends.get(j).getObjectId())){
+                        if (statuses.get(i).getUser().getObjectId().equals(friends.get(j).getObjectId())) {
                             allStatuses.add(statuses.get(i));
                         }
                     }
@@ -107,4 +107,12 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
+    //private List<Status> getFriendStatuses(List<Status> statuses) {
+        //List<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
+
+        //for (int i = 0; i < statuses.size(); i++) {
+
+        //}
+    //}
 }

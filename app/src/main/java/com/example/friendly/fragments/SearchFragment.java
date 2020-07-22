@@ -133,7 +133,7 @@ public class SearchFragment extends Fragment {
                     return;
                 }
                 // The query was successful.
-                allUsers.addAll(users);
+                allUsers.addAll(users);  //TODO don't add all users, instead add the users you need
                 // remove current user from search
                 for (int i = 0; i < allUsers.size(); i++) {
                     if (allUsers.get(i).getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {

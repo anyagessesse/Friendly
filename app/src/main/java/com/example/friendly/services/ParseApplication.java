@@ -1,4 +1,4 @@
-package com.example.friendly;
+package com.example.friendly.services;
 
 import android.app.Application;
 

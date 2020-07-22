@@ -55,7 +55,7 @@ public class StatusUpdateActivity extends AppCompatActivity {
 
         //user can search for a location to set in their status
         //initializes google places api key
-        String apiKey = getString(R.string.google_api_key);
+        String apiKey = getString(R.string.api_key);
         if (!Places.isInitialized()) {
             Places.initialize(getApplicationContext(), apiKey);
         }
@@ -77,7 +77,7 @@ public class StatusUpdateActivity extends AppCompatActivity {
                 try {
                     List<Address> addresses = geocoder.getFromLocation(MyLat, MyLong, 1);
                     stateName = addresses.get(0).getAdminArea();
-                    cityName = addresses.get(0).getLocality();     //TODO include country?
+                    cityName = addresses.get(0).getLocality();     //TODO include country or go back to add international places?
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
