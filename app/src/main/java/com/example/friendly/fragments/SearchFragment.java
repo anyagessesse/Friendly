@@ -1,5 +1,6 @@
 package com.example.friendly.fragments;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -42,6 +43,7 @@ public class SearchFragment extends Fragment {
     private Button searchButton; //TODO button currently does nothing, possibly remove or find use? maybe use to query users that match from database
     private String searchText;
     private SwipeRefreshLayout swipeContainer;
+    ProgressDialog progressDialog;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -57,6 +59,13 @@ public class SearchFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // show progress dialog while waiting for query from Parse
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setTitle("Loading...");
+        progressDialog.setMessage("Please wait.");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
 
         // Lookup the swipe container view
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
@@ -141,6 +150,7 @@ public class SearchFragment extends Fragment {
                 // The query was successful.
                 allUsers.addAll(users);  //TODO don't add all users, instead add the users you need
                 adapter.notifyDataSetChanged();
+                progressDialog.dismiss();
             }
         });
     }

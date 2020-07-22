@@ -1,5 +1,6 @@
 package com.example.friendly.fragments;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,6 +37,7 @@ public class HomeFragment extends Fragment {
     private StatusesAdapter adapter;
     private List<Status> allStatuses;
     private SwipeRefreshLayout swipeContainer;
+    ProgressDialog progressDialog;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -51,6 +53,13 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // show progress dialog while waiting for query from Parse
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setTitle("Loading...");
+        progressDialog.setMessage("Please wait.");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
 
         // Lookup the swipe container view
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
@@ -74,6 +83,7 @@ public class HomeFragment extends Fragment {
         recyclerviewStatuses.setAdapter(adapter);
         recyclerviewStatuses.setLayoutManager(new LinearLayoutManager(getContext()));
         queryStatuses();
+
     }
 
     //TODO change query statuses to only update the one new status instead of reloading all statuses
@@ -107,6 +117,7 @@ public class HomeFragment extends Fragment {
                 }
                 allStatuses.addAll(statuses);
                 adapter.notifyDataSetChanged();
+                progressDialog.dismiss();
             }
         });
     }
