@@ -79,10 +79,21 @@ public class HomeFragment extends Fragment {
     //TODO change query statuses to only update the one new status instead of reloading all statuses
     //gets statuses from Parse db
     private void queryStatuses() {
-        ParseQuery<Status> query = ParseQuery.getQuery(Status.class);
+        //get statuses from friends
+        ParseQuery<Status> queryFriendsStatuses = ParseQuery.getQuery(Status.class);
         List<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
-        //gets only statuses from users in friends list
-        query.whereContainedIn(Status.KEY_USER, friends);
+        queryFriendsStatuses.whereContainedIn(Status.KEY_USER, friends);
+
+        //get statuses from current user
+        ParseQuery<Status> queryUsersStatuses = ParseQuery.getQuery(Status.class);
+        queryUsersStatuses.whereEqualTo(Status.KEY_USER, ParseUser.getCurrentUser());
+
+        //combine queries
+        List<ParseQuery<Status>> queries = new ArrayList<>();
+        queries.add(queryFriendsStatuses);
+        queries.add(queryUsersStatuses);
+        ParseQuery<Status> query = ParseQuery.or(queries);
+
         query.include(Status.KEY_USER);
         query.setLimit(10); //TODO change limit
         query.addDescendingOrder(Status.KEY_CREATED_AT);
