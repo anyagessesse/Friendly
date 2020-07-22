@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -100,6 +101,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             // remove friend from friends list on profile page
             users.remove(getPosition());
             notifyItemRemoved(getPosition());
+            Toast.makeText(context, itemUser.getUsername() + " was removed from your friends list!", Toast.LENGTH_SHORT).show();
         }
     }
 

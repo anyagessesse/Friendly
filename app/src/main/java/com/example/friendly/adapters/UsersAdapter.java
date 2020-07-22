@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -98,6 +99,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
             // remove friend from search list
             users.remove(getPosition());
             notifyItemRemoved(getPosition());
+            Toast.makeText(context, itemUser.getUsername() + " was added to your friends list!", Toast.LENGTH_SHORT).show();
         }
     }
 
