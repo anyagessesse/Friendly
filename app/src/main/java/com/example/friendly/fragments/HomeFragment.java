@@ -1,6 +1,10 @@
 package com.example.friendly.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,11 +12,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.friendly.R;
 import com.example.friendly.adapters.StatusesAdapter;
@@ -23,6 +22,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -80,9 +80,12 @@ public class HomeFragment extends Fragment {
     }
 
     //TODO change query statuses to only update the one new status instead of reloading all statuses
-    //gets all statuses from Parse db
+    //gets statuses from Parse db
     private void queryStatuses() {
         ParseQuery<Status> query = ParseQuery.getQuery(Status.class);
+        Collection<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
+        //gets only statuses from users in friends list
+        query.whereContainedIn(Status.KEY_USER, friends);
         query.include(Status.KEY_USER);
         query.setLimit(10); //TODO change limit
         query.addDescendingOrder(Status.KEY_CREATED_AT);
@@ -94,25 +97,9 @@ public class HomeFragment extends Fragment {
                     Log.e(TAG, "issue getting posts", e);
                     return;
                 }
-                //query was successful
-                List<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
-                for (int i = 0; i < statuses.size(); i++) {
-                    for (int j = 0; j < friends.size(); j++) {
-                        if (statuses.get(i).getUser().getObjectId().equals(friends.get(j).getObjectId())) {
-                            allStatuses.add(statuses.get(i));
-                        }
-                    }
-                }
+                allStatuses.addAll(statuses);
                 adapter.notifyDataSetChanged();
             }
         });
     }
-
-    //private List<Status> getFriendStatuses(List<Status> statuses) {
-        //List<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
-
-        //for (int i = 0; i < statuses.size(); i++) {
-
-        //}
-    //}
 }

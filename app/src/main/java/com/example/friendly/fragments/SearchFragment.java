@@ -121,8 +121,16 @@ public class SearchFragment extends Fragment {
     }
 
     private void queryUsers() {
-        //gets all users in alphabetical order
+        //gets all users that aren't friends of the current user in alphabetical order
         ParseQuery<ParseUser> query = ParseUser.getQuery();
+        //get objectId for each friend and the current user to remove from query
+        List<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
+        List<String> friendIds = new ArrayList<>();
+        for (int i = 0; i < friends.size(); i++) {
+            friendIds.add(friends.get(i).getObjectId());
+        }
+        friendIds.add(ParseUser.getCurrentUser().getObjectId());
+        query.whereNotContainedIn("objectId", friendIds);
         query.setLimit(20);
         query.addAscendingOrder("username");  //TODO implement infinite scroll of users
         query.findInBackground(new FindCallback<ParseUser>() {
@@ -134,25 +142,6 @@ public class SearchFragment extends Fragment {
                 }
                 // The query was successful.
                 allUsers.addAll(users);  //TODO don't add all users, instead add the users you need
-                // remove current user from search
-                for (int i = 0; i < allUsers.size(); i++) {
-                    if (allUsers.get(i).getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
-                        allUsers.remove(i);
-                    }
-                }
-
-                //remove any friends from search list  TODO consider using hash table instead?
-                List<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
-                for (int j = 0; j < allUsers.size(); j++) {
-                    for (int k = 0; k < friends.size(); k++) {
-                        if (allUsers.get(j).getObjectId().equals(friends.get(k).getObjectId())) {
-                            allUsers.remove(j);
-                            if (j < allUsers.size() - 1 && j > 0) {
-                                j--;
-                            }
-                        }
-                    }
-                }
                 adapter.notifyDataSetChanged();
             }
         });
