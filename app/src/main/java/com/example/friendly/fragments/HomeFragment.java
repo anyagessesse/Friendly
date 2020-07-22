@@ -22,7 +22,6 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -37,7 +36,6 @@ public class HomeFragment extends Fragment {
     private StatusesAdapter adapter;
     private List<Status> allStatuses;
     private SwipeRefreshLayout swipeContainer;
-    private int skip; //TODO to be used for infinite scroll later
 
     public HomeFragment() {
         // Required empty public constructor
@@ -60,7 +58,6 @@ public class HomeFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                skip = 0;
                 queryStatuses();
                 adapter.clear();
                 adapter.addAll(allStatuses);
@@ -83,7 +80,7 @@ public class HomeFragment extends Fragment {
     //gets statuses from Parse db
     private void queryStatuses() {
         ParseQuery<Status> query = ParseQuery.getQuery(Status.class);
-        Collection<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
+        List<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
         //gets only statuses from users in friends list
         query.whereContainedIn(Status.KEY_USER, friends);
         query.include(Status.KEY_USER);

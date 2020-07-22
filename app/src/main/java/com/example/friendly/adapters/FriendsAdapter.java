@@ -100,7 +100,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             // remove friend from friends list on profile page
             users.remove(getPosition());
             notifyItemRemoved(getPosition());
-            notifyItemRangeChanged(getPosition(), users.size());
         }
     }
 

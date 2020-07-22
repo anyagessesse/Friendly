@@ -42,7 +42,6 @@ public class SearchFragment extends Fragment {
     private Button searchButton; //TODO button currently does nothing, possibly remove or find use? maybe use to query users that match from database
     private String searchText;
     private SwipeRefreshLayout swipeContainer;
-    private int skip; //TODO to be used for infinite scroll later
 
     public SearchFragment() {
         // Required empty public constructor
@@ -65,7 +64,6 @@ public class SearchFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //skip = 0;
                 queryUsers();
                 adapter.clear();
                 adapter.addAll(allUsers);
