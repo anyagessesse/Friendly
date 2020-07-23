@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,12 +47,14 @@ public class ProfileFragment extends Fragment {
     private TextView username;
     private ImageView profilePic;
     private Button changeProfilePic;
+    private ProgressBar loadingProfilePic;
     private RecyclerView recyclerviewFriends;
     private FriendsAdapter adapter;
     private List<ParseUser> allFriends;
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1046;
     private File photoFile;
     public String photoFileName = "photo.jpg";
+    ParseUser curUser;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -71,9 +74,10 @@ public class ProfileFragment extends Fragment {
         username = view.findViewById(R.id.text_username);
         profilePic = view.findViewById(R.id.image_profile_pic);
         changeProfilePic = view.findViewById(R.id.button_change_profile_pic);
+        loadingProfilePic = view.findViewById(R.id.loading_bar);
 
         //add user data to profile page
-        ParseUser curUser = ParseUser.getCurrentUser();
+        curUser = ParseUser.getCurrentUser();
         if (curUser.getParseFile("profilePic") != null) {
             Glide.with(view).load(curUser.getParseFile("profilePic").getUrl()).into(profilePic);
         } else {
@@ -140,6 +144,8 @@ public class ProfileFragment extends Fragment {
     }
 
     private void saveImage(File photoFile) {
+        loadingProfilePic.setVisibility(View.VISIBLE);
+        Glide.with(getContext()).load(R.drawable.grey_square).into(profilePic);
         ParseUser currentUser = ParseUser.getCurrentUser();
         currentUser.put("profilePic", new ParseFile(photoFile));
         currentUser.saveInBackground(new SaveCallback() {
@@ -148,6 +154,8 @@ public class ProfileFragment extends Fragment {
                 if (e != null) {
                     Log.e(TAG, "Error while saving", e);
                 }
+                Glide.with(getContext()).load(curUser.getParseFile("profilePic").getUrl()).into(profilePic);
+                loadingProfilePic.setVisibility(View.INVISIBLE);
             }
         });
     }
