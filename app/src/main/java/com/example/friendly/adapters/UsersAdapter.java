@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.example.friendly.R;
 import com.parse.ParseUser;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -93,13 +94,14 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
             //    friends = new ArrayList<>();  //TODO come back and delete this if signup code works
             //}
             friends.add(itemUser);
+            Collections.sort(friends, (o1, o2) -> o1.getUsername().compareTo(o2.getUsername()));
             ParseUser.getCurrentUser().put("friends", friends);
             ParseUser.getCurrentUser().saveInBackground();
 
             // remove friend from search list
             users.remove(getPosition());
             notifyItemRemoved(getPosition());
-            Toast.makeText(context, view.getContext().getString(R.string.added_friend,itemUser.getUsername()), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, view.getContext().getString(R.string.added_friend, itemUser.getUsername()), Toast.LENGTH_SHORT).show();
         }
     }
 
