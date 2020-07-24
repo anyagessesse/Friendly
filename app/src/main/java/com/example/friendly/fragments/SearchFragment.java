@@ -36,14 +36,16 @@ import java.util.List;
 public class SearchFragment extends Fragment {
     public static final String TAG = "SearchFragment";
 
-    private RecyclerView recyclerviewUsers;
-    private UsersAdapter adapter;
-    private List<ParseUser> allUsers;
     private EditText searchBar;
     private Button searchButton; //TODO button currently does nothing, possibly remove or find use? maybe use to query users that match from database
     private String searchText;
+
+    private RecyclerView recyclerviewUsers;
+    private UsersAdapter adapter;
+    private List<ParseUser> allUsers;
+
     private SwipeRefreshLayout swipeContainer;
-    ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -148,8 +150,10 @@ public class SearchFragment extends Fragment {
                     return;
                 }
                 // The query was successful.
-                allUsers.addAll(users);  //TODO don't add all users, instead add the users you need
-                adapter.notifyDataSetChanged();
+                if (!users.isEmpty()){
+                    allUsers.addAll(users);  //TODO don't add all users, instead add the users you need
+                    adapter.notifyDataSetChanged();
+                }
                 progressDialog.dismiss();
             }
         });

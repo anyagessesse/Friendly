@@ -36,8 +36,9 @@ public class HomeFragment extends Fragment {
     private RecyclerView recyclerviewStatuses;
     private StatusesAdapter adapter;
     private List<Status> allStatuses;
+
     private SwipeRefreshLayout swipeContainer;
-    ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -114,8 +115,10 @@ public class HomeFragment extends Fragment {
                     Log.e(TAG, "issue getting posts", e);
                     return;
                 }
-                allStatuses.addAll(statuses);
-                adapter.notifyDataSetChanged();
+                if (!statuses.isEmpty()){
+                    allStatuses.addAll(statuses);
+                    adapter.notifyDataSetChanged();
+                }
                 progressDialog.dismiss();
             }
         });

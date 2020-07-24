@@ -44,17 +44,19 @@ import static android.app.Activity.RESULT_OK;
 public class ProfileFragment extends Fragment {
     public static final String TAG = "ProfileFragment";
 
+    private ParseUser curUser;
     private TextView username;
     private ImageView profilePic;
     private Button changeProfilePic;
     private ProgressBar loadingProfilePic;
+
     private RecyclerView recyclerviewFriends;
     private FriendsAdapter adapter;
     private List<ParseUser> allFriends;
+
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1046;
     private File photoFile;
     public String photoFileName = "photo.jpg";
-    ParseUser curUser;
 
     public ProfileFragment() {
         // Required empty public constructor
