@@ -75,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (e != null) {
                     //signup unsuccessful
                     Log.e(TAG, "issue signing up", e);
-                    Toast.makeText(LoginActivity.this, "pick a different username or password", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, getString(R.string.user_password_error), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 //signup successful
@@ -91,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (e != null) {
                     //login unsuccessful
                     Log.e(TAG, "issue logging in", e);
-                    Toast.makeText(LoginActivity.this, "username or password is incorrect", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, getString(R.string.user_password_incorrect), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 //login successful

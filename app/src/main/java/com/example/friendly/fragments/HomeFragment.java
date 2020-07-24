@@ -56,8 +56,8 @@ public class HomeFragment extends Fragment {
 
         // show progress dialog while waiting for query from Parse
         progressDialog = new ProgressDialog(getContext());
-        progressDialog.setTitle("Loading...");
-        progressDialog.setMessage("Please wait.");
+        progressDialog.setTitle(getString(R.string.loading));
+        progressDialog.setMessage(getString(R.string.wait));
         progressDialog.setCancelable(false);
         progressDialog.show();
 
@@ -83,7 +83,6 @@ public class HomeFragment extends Fragment {
         recyclerviewStatuses.setAdapter(adapter);
         recyclerviewStatuses.setLayoutManager(new LinearLayoutManager(getContext()));
         queryStatuses();
-
     }
 
     //TODO change query statuses to only update the one new status instead of reloading all statuses

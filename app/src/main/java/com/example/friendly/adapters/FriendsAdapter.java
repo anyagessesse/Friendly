@@ -101,7 +101,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             // remove friend from friends list on profile page
             users.remove(getPosition());
             notifyItemRemoved(getPosition());
-            Toast.makeText(context, itemUser.getUsername() + " was removed from your friends list!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, view.getContext().getString(R.string.removed_friend,itemUser.getUsername()), Toast.LENGTH_SHORT).show();
         }
     }
 

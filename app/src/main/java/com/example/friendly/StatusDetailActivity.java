@@ -60,7 +60,7 @@ public class StatusDetailActivity extends AppCompatActivity {
             Date endTime = status.getDate("endTime");
             String formattedEndTime = parserEndTime.format(endTime);
             timeRange.setVisibility(View.VISIBLE);
-            timeRange.setText("Now - " + formattedEndTime);
+            timeRange.setText(getString(R.string.time_range, formattedEndTime));
         }
 
         // add location if specified
@@ -68,8 +68,7 @@ public class StatusDetailActivity extends AppCompatActivity {
             String city = status.getString("city");
             String state = status.getString("state");
             location.setVisibility(View.VISIBLE);
-            location.setText(city + ", " + state);
+            location.setText(getString(R.string.location, city, state));
         }
-
     }
 }

@@ -62,8 +62,8 @@ public class SearchFragment extends Fragment {
 
         // show progress dialog while waiting for query from Parse
         progressDialog = new ProgressDialog(getContext());
-        progressDialog.setTitle("Loading...");
-        progressDialog.setMessage("Please wait.");
+        progressDialog.setTitle(getString(R.string.loading));
+        progressDialog.setMessage(getString(R.string.wait));
         progressDialog.setCancelable(false);
         progressDialog.show();
 

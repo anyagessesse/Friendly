@@ -138,7 +138,7 @@ public class ProfileFragment extends Fragment {
             if (resultCode == RESULT_OK) {
                 saveImage(photoFile);
             } else { // Result was a failure
-                Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.picture_not_taken), Toast.LENGTH_SHORT).show();
             }
         }
     }

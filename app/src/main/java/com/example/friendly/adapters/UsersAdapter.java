@@ -99,7 +99,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
             // remove friend from search list
             users.remove(getPosition());
             notifyItemRemoved(getPosition());
-            Toast.makeText(context, itemUser.getUsername() + " was added to your friends list!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, view.getContext().getString(R.string.added_friend,itemUser.getUsername()), Toast.LENGTH_SHORT).show();
         }
     }
 
