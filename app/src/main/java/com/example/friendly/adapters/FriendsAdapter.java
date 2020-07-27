@@ -1,6 +1,8 @@
 package com.example.friendly.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.friendly.R;
+import com.example.friendly.objects.FriendRemoval;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
@@ -88,6 +91,35 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
         @Override
         public void onClick(View view) {
+            // confirms that the clicked on friend should be removed
+            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+            builder.setMessage(view.getContext().getString(R.string.confirm_remove, itemUser.getUsername()))
+                    .setCancelable(false)
+                    .setPositiveButton(view.getContext().getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            // if confirm is clicked, remove the friend
+                            removeFriend();
+                        }
+                    })
+                    .setNegativeButton(view.getContext().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            // if cancel is clicked, do not remove the friend
+                            dialogInterface.cancel();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+
+        private void removeFriend() {
+            //create new friend removal object
+            FriendRemoval removal = new FriendRemoval();
+            removal.setFromUser(ParseUser.getCurrentUser());
+            removal.setToUser(itemUser);
+            removal.saveInBackground();
+
             //remove friend from friends list in db
             List<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
             for (int i = 0; i < friends.size(); i++) {
@@ -101,7 +133,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             // remove friend from friends list on profile page
             users.remove(getPosition());
             notifyItemRemoved(getPosition());
-            Toast.makeText(context, view.getContext().getString(R.string.removed_friend,itemUser.getUsername()), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getString(R.string.removed_friend, itemUser.getUsername()), Toast.LENGTH_SHORT).show();
         }
     }
 

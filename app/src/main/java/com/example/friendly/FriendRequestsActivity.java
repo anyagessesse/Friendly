@@ -17,6 +17,9 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * activity that displays the current users friend requests
+ */
 public class FriendRequestsActivity extends AppCompatActivity {
     public static final String TAG = "FriendRequestsActivity";
 

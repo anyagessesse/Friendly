@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.friendly.R;
 import com.example.friendly.adapters.FriendsAdapter;
+import com.example.friendly.objects.FriendRemoval;
 import com.example.friendly.objects.FriendRequest;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -123,32 +124,64 @@ public class ProfileFragment extends Fragment {
                     Log.e(TAG, "issue getting requests", e);
                     return;
                 }
-                if (friendRequests.isEmpty()) {
-                    return;
-                }
-                for (int i = 0; i < friendRequests.size(); i++) {
-                    // adds the accepted friend to friends list
-                    if (friendRequests.get(i).getBoolean(FriendRequest.KEY_ACCEPTED)) {
-                        newFriends.add(friendRequests.get(i).getParseUser("toUser"));
-                        ParseUser.getCurrentUser().put("friends", newFriends);
-                        ParseUser.getCurrentUser().saveInBackground();
+                if (!friendRequests.isEmpty()) {
+                    for (int i = 0; i < friendRequests.size(); i++) {
+                        // adds the accepted friend to friends list
+                        if (friendRequests.get(i).getBoolean(FriendRequest.KEY_ACCEPTED)) {
+                            newFriends.add(friendRequests.get(i).getParseUser("toUser"));
 
-                        // deleting the friend request
-                        try {
-                            FriendRequest request = friendRequests.get(i);
-                            request.delete();
-                            request.saveInBackground();
-                        } catch (ParseException ex) {
-                            ex.printStackTrace();
+                            // deleting the friend request
+                            try {
+                                FriendRequest request = friendRequests.get(i);
+                                request.delete();
+                                request.saveInBackground();
+                            } catch (ParseException ex) {
+                                ex.printStackTrace();
+                            }
                         }
                     }
+                    // save the updated list of friends in Parse server
+                    ParseUser.getCurrentUser().put("friends", newFriends);
+                    ParseUser.getCurrentUser().saveInBackground();
                 }
+                // after requests are handled, remove all users that have removed friendship
+                ParseQuery<FriendRemoval> removalQuery = ParseQuery.getQuery(FriendRemoval.class);
+                removalQuery.whereEqualTo(FriendRemoval.KEY_TO_USER, ParseUser.getCurrentUser());
+                removalQuery.include(FriendRemoval.KEY_FROM_USER);
+                removalQuery.findInBackground(new FindCallback<FriendRemoval>() {
+                    @Override
+                    public void done(List<FriendRemoval> friendRemovals, ParseException e) {
+                        if (e != null) {
+                            //query unsuccessful
+                            Log.e(TAG, "issue getting removals", e);
+                            return;
+                        }
+                        if (!friendRemovals.isEmpty()) { //TODO still doesn't work :(
+                            List<ParseUser> removeFriends = new ArrayList<>();
+
+                            // add users to list of removeFriends and delete the friend removals objects
+                            for (int i = 0; i < friendRemovals.size(); i++) {
+                                removeFriends.add(friendRemovals.get(i).getFromUser());
+                                FriendRemoval friendRemoval = friendRemovals.get(i);
+                                try {
+                                    friendRemoval.delete();
+                                    friendRemoval.saveInBackground();
+                                } catch (ParseException ex) {
+                                    ex.printStackTrace();
+                                }
+                            }
+                            ParseUser.getCurrentUser().removeAll("friends", removeFriends);
+                            ParseUser.getCurrentUser().saveInBackground();
+                        }
+                    }
+                });
             }
         });
 
+
         //gets all users in friends array
         if (ParseUser.getCurrentUser().getList("friends") != null) {
-            allFriends.addAll(newFriends);
+            allFriends.addAll(ParseUser.getCurrentUser().getList("friends"));
             adapter.notifyDataSetChanged();
         }
     }
