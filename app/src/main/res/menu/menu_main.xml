@@ -12,5 +12,10 @@
         android:icon="@drawable/ic_baseline_add_comment_24"
         android:title="@string/post_status"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/friend_requests"
+        android:icon="@drawable/ic_baseline_notifications_24"
+        android:title="@string/friend_requests"
+        app:showAsAction="ifRoom" />
 
 </menu>

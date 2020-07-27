@@ -51,6 +51,10 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(MainActivity.this, StatusUpdateActivity.class);
                     startActivity(intent);
                 }
+                if (item.getItemId() == R.id.friend_requests) {
+                    Intent intent = new Intent(MainActivity.this, FriendRequestsActivity.class);
+                    startActivity(intent);
+                }
                 return true;
             }
         });

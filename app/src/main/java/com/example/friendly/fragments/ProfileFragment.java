@@ -25,8 +25,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.friendly.R;
 import com.example.friendly.adapters.FriendsAdapter;
+import com.example.friendly.objects.FriendRequest;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -106,9 +110,45 @@ public class ProfileFragment extends Fragment {
     }
 
     private void queryFriends() {
+        List<ParseUser> newFriends = ParseUser.getCurrentUser().getList("friends");
+        // check if any friend requests have been accepted
+        ParseQuery<FriendRequest> query = ParseQuery.getQuery(FriendRequest.class);
+        query.whereEqualTo(FriendRequest.KEY_FROM_USER, ParseUser.getCurrentUser());
+        query.include(FriendRequest.KEY_TO_USER);
+        query.findInBackground(new FindCallback<FriendRequest>() {
+            @Override
+            public void done(List<FriendRequest> friendRequests, ParseException e) {
+                if (e != null) {
+                    //query unsuccessful
+                    Log.e(TAG, "issue getting requests", e);
+                    return;
+                }
+                if (friendRequests.isEmpty()) {
+                    return;
+                }
+                for (int i = 0; i < friendRequests.size(); i++) {
+                    // adds the accepted friend to friends list
+                    if (friendRequests.get(i).getBoolean(FriendRequest.KEY_ACCEPTED)) {
+                        newFriends.add(friendRequests.get(i).getParseUser("toUser"));
+                        ParseUser.getCurrentUser().put("friends", newFriends);
+                        ParseUser.getCurrentUser().saveInBackground();
+
+                        // deleting the friend request
+                        try {
+                            FriendRequest request = friendRequests.get(i);
+                            request.delete();
+                            request.saveInBackground();
+                        } catch (ParseException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }
+            }
+        });
+
         //gets all users in friends array
         if (ParseUser.getCurrentUser().getList("friends") != null) {
-            allFriends.addAll(ParseUser.getCurrentUser().<ParseUser>getList("friends"));
+            allFriends.addAll(newFriends);
             adapter.notifyDataSetChanged();
         }
     }
@@ -176,6 +216,5 @@ public class ProfileFragment extends Fragment {
 
         // Return the file target for the photo based on filename
         return new File(mediaStorageDir.getPath() + File.separator + fileName);
-
     }
 }

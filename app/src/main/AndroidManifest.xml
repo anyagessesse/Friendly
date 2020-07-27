@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".StatusDetailActivity"></activity>
+        <activity android:name=".FriendRequestsActivity"></activity>
+        <activity android:name=".StatusDetailActivity" />
         <activity android:name=".StatusUpdateActivity" />
 
         <provider
@@ -35,8 +36,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"
-            android:windowSoftInputMode="adjustNothing"/>
+        <activity
+            android:name=".MainActivity"
+            android:windowSoftInputMode="adjustNothing" />
 
         <service android:name=".services.MyFirebaseMessagingService">
             <intent-filter>

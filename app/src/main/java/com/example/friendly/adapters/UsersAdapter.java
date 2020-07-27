@@ -1,6 +1,7 @@
 package com.example.friendly.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.friendly.R;
+import com.example.friendly.objects.FriendRequest;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -22,13 +29,17 @@ import java.util.List;
  * adapter of users for recyclerview in the search fragment
  */
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> {
+    public static final String TAG = "UsersAdapter";
 
     private final Context context;
     private List<ParseUser> users;
+    private List<FriendRequest> requests;
+    private List<ParseUser> friends;
 
     public UsersAdapter(Context context, List<ParseUser> users) {
         this.context = context;
         this.users = users;
+        requests = new ArrayList<>();
     }
 
     @NonNull
@@ -89,20 +100,59 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         @Override
         public void onClick(View view) {
             // adds friend to friends list in Parse db
-            List<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
-            //if (friends == null) {
-            //    friends = new ArrayList<>();  //TODO come back and delete this if signup code works
-            //}
-            friends.add(itemUser);
-            Collections.sort(friends, (o1, o2) -> o1.getUsername().compareTo(o2.getUsername()));
-            ParseUser.getCurrentUser().put("friends", friends);
-            ParseUser.getCurrentUser().saveInBackground();
+            friends = ParseUser.getCurrentUser().getList("friends");
+
+            // creates a new friend request or accepts an existing request
+            handleRequest(itemUser);
 
             // remove friend from search list
             users.remove(getPosition());
             notifyItemRemoved(getPosition());
-            Toast.makeText(context, view.getContext().getString(R.string.added_friend, itemUser.getUsername()), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void handleRequest(ParseUser itemUser) {
+        ParseQuery<FriendRequest> query = ParseQuery.getQuery(FriendRequest.class);
+        query.whereEqualTo(FriendRequest.KEY_TO_USER, ParseUser.getCurrentUser());
+        query.whereEqualTo(FriendRequest.KEY_FROM_USER, itemUser);
+        query.include(FriendRequest.KEY_TO_USER);
+        query.findInBackground(new FindCallback<FriendRequest>() {
+            @Override
+            public void done(List<FriendRequest> friendRequests, ParseException e) {
+                if (e != null) {
+                    //query unsuccessful
+                    Log.e(TAG, "issue getting requests", e);
+                    return;
+                }
+                if (friendRequests.isEmpty()) {
+                    //creates a new friend request if there isn't currently a request between the current user and clicked user
+                    FriendRequest friendRequest = new FriendRequest();
+                    friendRequest.setFromUser(ParseUser.getCurrentUser());
+                    friendRequest.setToUser(itemUser);
+                    friendRequest.setAccepted(false);
+                    friendRequest.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e != null) {
+                                //status unsuccessfully added to db
+                                Log.e(TAG, "issue when saving post", e);
+                                return;
+                            }
+                            Toast.makeText(context, context.getString(R.string.request_sent, itemUser.getUsername()), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    //if there is a request then the request gets accepted and the friend is added to friends list
+                    friendRequests.get(0).put(FriendRequest.KEY_ACCEPTED, true);
+                    friendRequests.get(0).saveInBackground();
+                    friends.add(itemUser);
+                    Collections.sort(friends, (o1, o2) -> o1.getUsername().compareTo(o2.getUsername()));
+                    ParseUser.getCurrentUser().put("friends", friends);
+                    ParseUser.getCurrentUser().saveInBackground();
+                    Toast.makeText(context, context.getString(R.string.added_friend), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     // Clean all elements of the recycler
