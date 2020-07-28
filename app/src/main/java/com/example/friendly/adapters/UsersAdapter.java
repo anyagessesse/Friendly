@@ -138,6 +138,9 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
                                 Log.e(TAG, "issue when saving post", e);
                                 return;
                             }
+                            // add the user to pending friend requests list for that user
+                            ParseUser.getCurrentUser().add("requests", itemUser);
+                            ParseUser.getCurrentUser().saveInBackground();
                             Toast.makeText(context, context.getString((R.string.request_sent), itemUser.getUsername()), Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -149,7 +152,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
                     Collections.sort(friends, (o1, o2) -> o1.getUsername().compareTo(o2.getUsername()));
                     ParseUser.getCurrentUser().put("friends", friends);
                     ParseUser.getCurrentUser().saveInBackground();
-                    Toast.makeText(context, context.getString((R.string.added_friend),itemUser.getUsername()), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, context.getString((R.string.added_friend), itemUser.getUsername()), Toast.LENGTH_SHORT).show();
                 }
             }
         });

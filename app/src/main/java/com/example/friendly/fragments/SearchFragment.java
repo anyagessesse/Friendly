@@ -130,15 +130,25 @@ public class SearchFragment extends Fragment {
     }
 
     private void queryUsers() {
-        //gets all users that aren't friends of the current user in alphabetical order
+        // gets all users that aren't friends of the current user in alphabetical order
         ParseQuery<ParseUser> query = ParseUser.getQuery();
-        //get objectId for each friend and the current user to remove from query
+
+        // get objectId for each friend
         List<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
         List<String> friendIds = new ArrayList<>();
         for (int i = 0; i < friends.size(); i++) {
             friendIds.add(friends.get(i).getObjectId());
         }
+
+        // get the current user objectId
         friendIds.add(ParseUser.getCurrentUser().getObjectId());
+
+        // get objectId for each user currently requested
+        List<ParseUser> requests = ParseUser.getCurrentUser().getList("requests");
+        for (int j = 0; j < requests.size(); j++) {
+            friendIds.add(requests.get(j).getObjectId());
+        }
+
         query.whereNotContainedIn("objectId", friendIds);
         query.setLimit(20);
         query.addAscendingOrder("username");  //TODO implement infinite scroll of users
@@ -150,7 +160,7 @@ public class SearchFragment extends Fragment {
                     return;
                 }
                 // The query was successful.
-                if (!users.isEmpty()){
+                if (!users.isEmpty()) {
                     allUsers.addAll(users);  //TODO don't add all users, instead add the users you need
                     adapter.notifyDataSetChanged();
                 }

@@ -68,6 +68,7 @@ public class LoginActivity extends AppCompatActivity {
         user.setUsername(username);
         user.setPassword(password);
         user.put("friends", new ArrayList<>());
+        user.put("requests", new ArrayList<>());
 
         user.signUpInBackground(new SignUpCallback() {
             @Override

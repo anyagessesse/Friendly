@@ -130,6 +130,17 @@ public class ProfileFragment extends Fragment {
                         if (friendRequests.get(i).getBoolean(FriendRequest.KEY_ACCEPTED)) {
                             newFriends.add(friendRequests.get(i).getParseUser("toUser"));
 
+                            // remove the user from pending friend requests list for that user
+                            List<ParseUser> requests = ParseUser.getCurrentUser().getList("requests");
+                            for (int j = 0; j < requests.size(); j++) {
+                                if (requests.get(j).getObjectId().equals(friendRequests.get(j).getParseUser("toUser").getObjectId())) {
+                                    requests.remove(j);
+                                }
+                            }
+                            requests.remove(friendRequests.get(i).getParseUser("toUser"));
+                            ParseUser.getCurrentUser().put("requests", requests);
+                            ParseUser.getCurrentUser().saveInBackground();
+
                             // deleting the friend request
                             try {
                                 FriendRequest request = friendRequests.get(i);
