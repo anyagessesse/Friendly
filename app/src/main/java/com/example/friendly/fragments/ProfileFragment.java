@@ -48,6 +48,8 @@ import static android.app.Activity.RESULT_OK;
  */
 public class ProfileFragment extends Fragment {
     public static final String TAG = "ProfileFragment";
+    public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1046;
+    public static final String photoFileName = "photo.jpg";
 
     private ParseUser curUser;
     private TextView username;
@@ -59,9 +61,7 @@ public class ProfileFragment extends Fragment {
     private FriendsAdapter adapter;
     private List<ParseUser> allFriends;
 
-    public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1046;
     private File photoFile;
-    public String photoFileName = "photo.jpg";
 
     public ProfileFragment() {
         // Required empty public constructor

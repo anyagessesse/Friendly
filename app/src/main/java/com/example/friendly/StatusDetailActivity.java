@@ -82,7 +82,7 @@ public class StatusDetailActivity extends AppCompatActivity {
         // show delete button if the status is of the logged in user
         if (status.getUser().getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
             deleteStatus.setVisibility(View.VISIBLE);
-            deleteStatus.setOnClickListener(new View.OnClickListener() {
+            deleteStatus.setOnClickListener(new View.OnClickListener() {  // TODO turn this into a standalone class to make onCreate smaller
                 @Override
                 public void onClick(View view) {
                     // launch dialog to confirm deleting the status
@@ -103,11 +103,7 @@ public class StatusDetailActivity extends AppCompatActivity {
                                     finish();
                                 }
                             })
-                            .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            });
+                            .setNegativeButton(getString(R.string.cancel), null);
                     AlertDialog alert = builder.create();
                     alert.show();
                 }

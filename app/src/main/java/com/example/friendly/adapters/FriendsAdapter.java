@@ -102,13 +102,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                             removeFriend();
                         }
                     })
-                    .setNegativeButton(view.getContext().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            // if cancel is clicked, do not remove the friend
-                            dialogInterface.cancel();
-                        }
-                    });
+                    .setNegativeButton(view.getContext().getString(R.string.cancel), null);
             AlertDialog alert = builder.create();
             alert.show();
         }
