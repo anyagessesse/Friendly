@@ -38,6 +38,8 @@
     <string name="time_range">Now - %1$s</string>
     <string name="location">%1$s, %2$s</string>
 
+    <string name="delete_status">Delete Status</string>
+    <string name="confirm_delete">Are you sure you want to delete this status?</string>
 
 
 </resources>
