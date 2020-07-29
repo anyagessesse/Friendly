@@ -1,5 +1,6 @@
 package com.example.friendly;
 
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
@@ -13,6 +14,7 @@ import android.widget.TimePicker;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.load.engine.Resource;
 import com.example.friendly.objects.Status;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
@@ -39,10 +41,14 @@ public class StatusUpdateActivity extends AppCompatActivity {
 
     private EditText description;
     private Button postStatusButton;
+    private EditText startTime;
+    private EditText endTime;
+
     private Status newStatus;
-    private TimePicker timePicker;
     private String stateName = "";
     private String cityName = "";
+    private Date dateStart;
+    private Date dateEnd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +57,8 @@ public class StatusUpdateActivity extends AppCompatActivity {
 
         description = findViewById(R.id.text_description);
         postStatusButton = findViewById(R.id.button_post_status);
-        timePicker = (TimePicker) findViewById(R.id.time_picker);
+        startTime = findViewById(R.id.text_start_time);
+        endTime = findViewById(R.id.text_end_time);
 
         //user can search for a location to set in their status
         //initializes google places api key
@@ -89,18 +96,81 @@ public class StatusUpdateActivity extends AppCompatActivity {
             }
         });
 
+        // time picker pops up to choose time when clicked
+        startTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar currentTime = Calendar.getInstance();
+                int hour = currentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = currentTime.get(Calendar.MINUTE);
+
+                TimePickerDialog timePickerDialog;
+                timePickerDialog = new TimePickerDialog(StatusUpdateActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        // parse the time
+                        Calendar cal = Calendar.getInstance();
+                        cal.set(Calendar.HOUR_OF_DAY, selectedHour);
+                        cal.set(Calendar.MINUTE, selectedMinute);
+                        dateStart = cal.getTime();
+
+                        // get am or pm
+                        String am_pm = "";
+                        if (cal.get(Calendar.AM_PM) == Calendar.AM) {
+                            am_pm = "AM";
+                        } else if (cal.get(Calendar.AM_PM) == Calendar.PM) {
+                            am_pm = "PM";
+                            selectedHour = selectedHour - 12;
+                        }
+
+                        startTime.setText(selectedHour + ":" + selectedMinute + " " + am_pm);
+                    }
+                }, hour, minute, false);
+                timePickerDialog.show();
+            }
+        });
+
+        // time picker pops up to choose time when clicked
+        endTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar currentTime = Calendar.getInstance();
+                int hour = currentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = currentTime.get(Calendar.MINUTE);
+
+                TimePickerDialog timePickerDialog;
+                timePickerDialog = new TimePickerDialog(StatusUpdateActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        // parse the time
+                        Calendar cal = Calendar.getInstance();
+                        cal.set(Calendar.HOUR_OF_DAY, selectedHour);
+                        cal.set(Calendar.MINUTE, selectedMinute);
+                        dateEnd = cal.getTime();
+
+                        // get am or pm
+                        String am_pm = "";
+                        if (cal.get(Calendar.AM_PM) == Calendar.AM) {
+                            am_pm = "AM";
+                        } else if (cal.get(Calendar.AM_PM) == Calendar.PM) {
+                            am_pm = "PM";
+                            selectedHour = selectedHour - 12;
+                        }
+
+                        endTime.setText(selectedHour + ":" + selectedMinute + " " + am_pm);
+                    }
+                }, hour, minute, false);
+                timePickerDialog.show();
+            }
+        });
+
         //adds status to db and navigates back to home fragment
         postStatusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String descriptionText = description.getText().toString();
 
-                // parse the date to save in database
-                Calendar cal = Calendar.getInstance();
-                cal.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
-                cal.set(Calendar.MINUTE, timePicker.getCurrentMinute());
-                Date date = cal.getTime();
-                saveStatus(descriptionText, ParseUser.getCurrentUser(), date, stateName, cityName);
+                saveStatus(descriptionText, ParseUser.getCurrentUser(), dateStart, dateEnd, stateName, cityName);
 
                 //go to home fragment to display statuses
                 Intent intent = new Intent(StatusUpdateActivity.this, MainActivity.class);
@@ -111,13 +181,18 @@ public class StatusUpdateActivity extends AppCompatActivity {
     }
 
     //saves a status to the parse database
-    private void saveStatus(String description, ParseUser currentUser, Date date, String stateName, String cityName) {
+    private void saveStatus(String description, ParseUser currentUser, Date startDate, Date endDate, String stateName, String cityName) {
         newStatus = new Status();
         newStatus.setDescription(description);
         newStatus.setUser(currentUser);
-        newStatus.put("endTime", date);
-        newStatus.put("state",stateName);
-        newStatus.put("city",cityName);
+        if (startDate != null) {
+            newStatus.put("startTime", startDate);
+        }
+        if (endDate != null) {
+            newStatus.put("endTime", endDate);
+        }
+        newStatus.put("state", stateName);
+        newStatus.put("city", cityName);
 
         newStatus.saveInBackground(new SaveCallback() {
             @Override

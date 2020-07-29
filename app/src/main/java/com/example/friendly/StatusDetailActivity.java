@@ -62,17 +62,24 @@ public class StatusDetailActivity extends AppCompatActivity {
         String formattedDate = parser.format(statusDate);
         this.date.setText(formattedDate);
 
-        // add time range if end time is specified
+        // add time range if start and end time is specified
         if (status.getDate("endTime") != null) {
-            SimpleDateFormat parserEndTime = new SimpleDateFormat("h:mm a");
+            SimpleDateFormat parserTime = new SimpleDateFormat("h:mm a");
             Date endTime = status.getDate("endTime");
-            String formattedEndTime = parserEndTime.format(endTime);
+            String formattedEndTime = parserTime.format(endTime);
             timeRange.setVisibility(View.VISIBLE);
-            timeRange.setText(getString(R.string.time_range, formattedEndTime));
+
+            if (status.getDate("startTime") != null) {
+                Date startTime = status.getDate("startTime");
+                String formattedStartTime = parserTime.format(startTime);
+                timeRange.setText(formattedStartTime + " - " + formattedEndTime);
+            } else {
+                timeRange.setText(getString(R.string.time_range, formattedEndTime));
+            }
         }
 
         // add location if specified
-        if (status.getString("city") != null) {
+        if (!status.getString("city").equals("")) {
             String city = status.getString("city");
             String state = status.getString("state");
             location.setVisibility(View.VISIBLE);
