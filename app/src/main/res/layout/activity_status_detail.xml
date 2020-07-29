@@ -9,6 +9,7 @@
 
     <TextView
         android:id="@+id/text_username"
+        android:transitionName="username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_medium"
@@ -21,6 +22,7 @@
 
     <TextView
         android:id="@+id/text_description"
+        android:transitionName="description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_medium"
@@ -33,6 +35,7 @@
 
     <ImageView
         android:id="@+id/image_profile_pic"
+        android:transitionName="profilePic"
         android:layout_width="@dimen/profile_pic_small"
         android:layout_height="@dimen/profile_pic_small"
         android:layout_margin="@dimen/margin_medium"

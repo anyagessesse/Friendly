@@ -1,5 +1,6 @@
 package com.example.friendly.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -10,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.util.Pair;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -108,8 +111,15 @@ public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.ViewHo
                 Intent intent = new Intent(context, StatusDetailActivity.class);
                 //send to detail view
                 intent.putExtra("status", status);
+
+                // add transitions
+                Pair<View, String> p1 = Pair.create((View) username, "username");
+                Pair<View, String> p2 = Pair.create((View) description, "description");
+                Pair<View, String> p3 = Pair.create((View) profilePic, "profilePic");
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context, p1, p2, p3);
+
                 //show the activity
-                context.startActivity(intent);
+                context.startActivity(intent, options.toBundle());
             }
         }
     }
