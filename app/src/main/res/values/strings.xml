@@ -43,5 +43,6 @@
     <string name="location_text">Location</string>
     <string name="start_time">Start Time</string>
 
-
+    <string name="post_warning">Please enter an end time.</string>
+    <string name="ok">Ok</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.example.friendly;
 
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -189,12 +191,22 @@ public class StatusUpdateActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String descriptionText = description.getText().toString();
 
-                saveStatus(descriptionText, ParseUser.getCurrentUser(), dateStart, dateEnd, stateName, cityName);
+                if (dateEnd == null) {
+                    // launch dialog tell user to add end time
+                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                    builder.setMessage(getString(R.string.post_warning))
+                            .setCancelable(false)
+                            .setNegativeButton(getString(R.string.ok), null);
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                } else {
+                    saveStatus(descriptionText, ParseUser.getCurrentUser(), dateStart, dateEnd, stateName, cityName);
 
-                //go to home fragment to display statuses
-                Intent intent = new Intent(StatusUpdateActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                    //go to home fragment to display statuses
+                    Intent intent = new Intent(StatusUpdateActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
     }
