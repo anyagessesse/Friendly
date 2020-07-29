@@ -9,11 +9,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.Resource;
 import com.example.friendly.objects.Status;
 import com.google.android.gms.maps.model.LatLng;
@@ -22,6 +25,7 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.android.material.textfield.TextInputEditText;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -39,7 +43,9 @@ import java.util.Locale;
 public class StatusUpdateActivity extends AppCompatActivity {
     private static final String TAG = "StatusUpdateActivity";
 
-    private EditText description;
+    private ImageView profilePic;
+    private TextView username;
+    private TextView description;
     private Button postStatusButton;
     private EditText startTime;
     private EditText endTime;
@@ -55,10 +61,22 @@ public class StatusUpdateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_status_update);
 
+        profilePic = findViewById(R.id.image_profile_pic);
+        username = findViewById(R.id.text_username);
         description = findViewById(R.id.text_description);
         postStatusButton = findViewById(R.id.button_post_status);
         startTime = findViewById(R.id.text_start_time);
         endTime = findViewById(R.id.text_end_time);
+
+        //load profile image
+        if (ParseUser.getCurrentUser().getParseFile("profilePic") != null) {
+            Glide.with(this).load(ParseUser.getCurrentUser().getParseFile("profilePic").getUrl()).circleCrop().into(profilePic);
+        } else {
+            //use placeholder image if user doesn't have a profile picture yet
+            Glide.with(this).load(R.drawable.placeholder).circleCrop().into(profilePic);
+        }
+        // load username
+        username.setText(ParseUser.getCurrentUser().getString("username"));
 
         //user can search for a location to set in their status
         //initializes google places api key
@@ -73,6 +91,7 @@ public class StatusUpdateActivity extends AppCompatActivity {
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
         autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
+        autocompleteFragment.setHint(getString(R.string.location_text));
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {

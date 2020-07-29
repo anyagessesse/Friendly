@@ -14,7 +14,7 @@
     <string name="user_password_incorrect">username or password is incorrect</string>
 
 
-    <string name="description">description...</string>
+    <string name="description">Description</string>
     <string name="search2">Search...</string>
     <string name="end_time">End Time</string>
     <string name="log_out">Log Out</string>
@@ -40,6 +40,8 @@
 
     <string name="delete_status">Delete Status</string>
     <string name="confirm_delete">Are you sure you want to delete this status?</string>
+    <string name="location_text">Location</string>
+    <string name="start_time">Start Time</string>
 
 
 </resources>
