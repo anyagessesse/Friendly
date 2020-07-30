@@ -13,6 +13,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.friendly.objects.Status;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
@@ -22,7 +29,7 @@ import java.util.Date;
 /**
  * activity used to show a more detailed view of a status
  */
-public class StatusDetailActivity extends AppCompatActivity {
+public class StatusDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
     public static final String TAG = "StatusDetailActivity";
 
     private ImageView profilePic;
@@ -33,6 +40,8 @@ public class StatusDetailActivity extends AppCompatActivity {
     private TextView timeRange;
     private TextView location;
     private Button deleteStatus;
+    private SupportMapFragment mapFragment;
+    private GoogleMap map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +55,11 @@ public class StatusDetailActivity extends AppCompatActivity {
         timeRange = findViewById(R.id.text_time_range);
         location = findViewById(R.id.text_location);
         deleteStatus = findViewById(R.id.delete_status);
+
+        // set up map fragment to display location
+        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this::onMapReady);
+
 
         //get status clicked on
         status = (Status) getIntent().getParcelableExtra("status");
@@ -116,5 +130,13 @@ public class StatusDetailActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+        LatLng location = new LatLng(status.getDouble("latitude"), status.getDouble("longitude"));
+        map.addMarker(new MarkerOptions().position(location));
+        map.moveCamera(CameraUpdateFactory.newLatLng(location));
     }
 }

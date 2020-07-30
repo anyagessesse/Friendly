@@ -55,6 +55,8 @@ public class StatusUpdateActivity extends AppCompatActivity {
     private Status newStatus;
     private String stateName = "";
     private String cityName = "";
+    private Double lat;
+    private Double lon;
     private Date dateStart;
     private Date dateEnd;
 
@@ -99,11 +101,11 @@ public class StatusUpdateActivity extends AppCompatActivity {
             public void onPlaceSelected(Place place) {
                 //parses place to save to database
                 LatLng latLng = place.getLatLng();
-                double MyLat = latLng.latitude;
-                double MyLong = latLng.longitude;
+                lat = latLng.latitude;
+                lon = latLng.longitude;
                 Geocoder geocoder = new Geocoder(StatusUpdateActivity.this, Locale.getDefault());
                 try {
-                    List<Address> addresses = geocoder.getFromLocation(MyLat, MyLong, 1);
+                    List<Address> addresses = geocoder.getFromLocation(lat, lon, 1);
                     stateName = addresses.get(0).getAdminArea();
                     cityName = addresses.get(0).getLocality();     //TODO include country or go back to add international places?
                 } catch (IOException e) {
@@ -200,7 +202,7 @@ public class StatusUpdateActivity extends AppCompatActivity {
                     AlertDialog alert = builder.create();
                     alert.show();
                 } else {
-                    saveStatus(descriptionText, ParseUser.getCurrentUser(), dateStart, dateEnd, stateName, cityName);
+                    saveStatus(descriptionText, ParseUser.getCurrentUser(), dateStart, dateEnd, stateName, cityName, lat, lon);
 
                     //go to home fragment to display statuses
                     Intent intent = new Intent(StatusUpdateActivity.this, MainActivity.class);
@@ -212,7 +214,7 @@ public class StatusUpdateActivity extends AppCompatActivity {
     }
 
     //saves a status to the parse database
-    private void saveStatus(String description, ParseUser currentUser, Date startDate, Date endDate, String stateName, String cityName) {
+    private void saveStatus(String description, ParseUser currentUser, Date startDate, Date endDate, String stateName, String cityName, Double lat, Double lon) {
         newStatus = new Status();
         newStatus.setDescription(description);
         newStatus.setUser(currentUser);
@@ -224,6 +226,10 @@ public class StatusUpdateActivity extends AppCompatActivity {
         }
         newStatus.put("state", stateName);
         newStatus.put("city", cityName);
+        if (lat != null) {
+            newStatus.put("latitude", lat);
+            newStatus.put("longitude", lon);
+        }
 
         newStatus.saveInBackground(new SaveCallback() {
             @Override

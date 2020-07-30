@@ -7,60 +7,25 @@
     android:layout_height="match_parent"
     tools:context=".StatusDetailActivity">
 
-    <TextView
-        android:id="@+id/text_username"
-        android:transitionName="username"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_medium"
-        android:layout_marginTop="@dimen/margin_medium2"
-        android:textColor="@android:color/black"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/image_profile_pic"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="anyagess" />
-
-    <TextView
-        android:id="@+id/text_description"
-        android:transitionName="description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_medium"
-        android:layout_marginTop="@dimen/margin_medium"
-        android:layout_marginEnd="@dimen/margin_medium"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/image_profile_pic"
-        app:layout_constraintTop_toBottomOf="@+id/text_time_range"
-        tools:text="decription" />
-
     <ImageView
         android:id="@+id/image_profile_pic"
-        android:transitionName="profilePic"
         android:layout_width="@dimen/profile_pic_small"
         android:layout_height="@dimen/profile_pic_small"
         android:layout_margin="@dimen/margin_medium"
         android:layout_marginStart="@dimen/margin_medium"
         android:layout_marginTop="@dimen/margin_medium"
         android:scaleType="centerCrop"
+        android:transitionName="profilePic"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/map"
         tools:srcCompat="@tools:sample/avatars" />
-
-    <TextView
-        android:id="@+id/text_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_medium2"
-        android:layout_marginEnd="@dimen/margin_medium"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Jul 17, 2020" />
 
     <TextView
         android:id="@+id/text_time_range"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin_medium"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_small"
         android:textSize="@dimen/text_medium"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
@@ -68,10 +33,46 @@
         tools:text="now-4:00pm" />
 
     <TextView
+        android:id="@+id/text_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_medium"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_medium"
+        android:transitionName="description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/image_profile_pic"
+        app:layout_constraintTop_toBottomOf="@+id/text_time_range"
+        tools:text="decription" />
+
+    <TextView
+        android:id="@+id/text_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_small"
+        android:layout_marginTop="@dimen/margin_medium2"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:transitionName="username"
+        app:layout_constraintStart_toEndOf="@+id/image_profile_pic"
+        app:layout_constraintTop_toBottomOf="@+id/map"
+        tools:text="anyagess" />
+
+    <TextView
+        android:id="@+id/text_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_medium2"
+        android:layout_marginEnd="@dimen/margin_small"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/map"
+        tools:text="Jul 17, 2020" />
+
+    <TextView
         android:id="@+id/text_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_medium"
+        android:layout_marginStart="@dimen/margin_small"
         android:textSize="@dimen/text_medium"
         android:visibility="gone"
         app:layout_constraintStart_toEndOf="@+id/image_profile_pic"
@@ -88,5 +89,14 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_description" />
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/map_height"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
