@@ -22,6 +22,7 @@ import com.example.friendly.objects.Status;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -31,17 +32,30 @@ import java.util.Locale;
 public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.ViewHolder> {
 
     private final Context context;
-    private final List<Status> statuses;
+    private List<Status> statuses;
     private static final int SECOND_MILLIS = 1000;
     private static final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
     private static final int HOUR_MILLIS = 60 * MINUTE_MILLIS;
     private static final int DAY_MILLIS = 24 * HOUR_MILLIS;
     public static final String TAG = "StatusesAdapter";
 
-    public StatusesAdapter(Context context, List<Status> statuses) {
+    public StatusesAdapter(Context context) {
         this.context = context;
-        this.statuses = statuses;
+        statuses = new ArrayList<>();
     }
+
+    public void updateStatuses(List<Status> list) {
+        statuses.clear();
+        statuses.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    // Clean all elements of the recycler
+    public void clear() {
+        statuses.clear();
+        notifyDataSetChanged();
+    }
+
 
     @NonNull
     @Override
@@ -122,18 +136,6 @@ public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.ViewHo
                 context.startActivity(intent, options.toBundle());
             }
         }
-    }
-
-    // Clean all elements of the recycler
-    public void clear() {
-        statuses.clear();
-        notifyDataSetChanged();
-    }
-
-    // Add a list of items -- change to type used
-    public void addAll(List<Status> list) {
-        statuses.addAll(list);
-        notifyDataSetChanged();
     }
 
     public String getRelativeTimeAgo(String rawJsonDate) {

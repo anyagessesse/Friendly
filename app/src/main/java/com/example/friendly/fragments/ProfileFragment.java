@@ -59,7 +59,6 @@ public class ProfileFragment extends Fragment {
 
     private RecyclerView recyclerviewFriends;
     private FriendsAdapter adapter;
-    private List<ParseUser> allFriends;
 
     private File photoFile;
 
@@ -95,8 +94,7 @@ public class ProfileFragment extends Fragment {
 
         //set up recyclerview of friends
         recyclerviewFriends = view.findViewById(R.id.recyclerview_friends);
-        allFriends = new ArrayList<>();
-        adapter = new FriendsAdapter(getContext(), allFriends);
+        adapter = new FriendsAdapter(getContext());
         recyclerviewFriends.setAdapter(adapter);
         recyclerviewFriends.setLayoutManager(new LinearLayoutManager(getContext()));
         queryFriends();
@@ -167,7 +165,7 @@ public class ProfileFragment extends Fragment {
                             Log.e(TAG, "issue getting removals", e);
                             return;
                         }
-                        if (!friendRemovals.isEmpty()) { //TODO still doesn't work :(
+                        if (!friendRemovals.isEmpty()) {
                             List<ParseUser> removeFriends = new ArrayList<>();
 
                             // add users to list of removeFriends and delete the friend removals objects
@@ -187,14 +185,17 @@ public class ProfileFragment extends Fragment {
                     }
                 });
             }
+
+
         });
-
-
         //gets all users in friends array
         if (ParseUser.getCurrentUser().getList("friends") != null) {
+            List<ParseUser> allFriends = new ArrayList<>();
             allFriends.addAll(ParseUser.getCurrentUser().getList("friends"));
-            adapter.notifyDataSetChanged();
+            adapter.clear();
+            adapter.updateUsers(allFriends);
         }
+
     }
 
     private void launchCamera() {

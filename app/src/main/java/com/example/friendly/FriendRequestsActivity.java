@@ -25,7 +25,6 @@ public class FriendRequestsActivity extends AppCompatActivity {
 
     private RecyclerView recyclerviewFriendRequests;
     private UsersAdapter adapter;
-    private List<ParseUser> requests;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +33,7 @@ public class FriendRequestsActivity extends AppCompatActivity {
 
         //set up recyclerview of users to search from
         recyclerviewFriendRequests = findViewById(R.id.recyclerview_friend_requests);
-        requests = new ArrayList<>();
-        adapter = new UsersAdapter(this, requests);
+        adapter = new UsersAdapter(this);
         recyclerviewFriendRequests.setAdapter(adapter);
         recyclerviewFriendRequests.setLayoutManager(new LinearLayoutManager(this));
         queryRequests();
@@ -45,6 +43,7 @@ public class FriendRequestsActivity extends AppCompatActivity {
         // gets all current friend requests
         ParseQuery<FriendRequest> query = ParseQuery.getQuery(FriendRequest.class);
         query.whereEqualTo(FriendRequest.KEY_TO_USER, ParseUser.getCurrentUser());
+        query.whereEqualTo(FriendRequest.KEY_ACCEPTED, false);
         query.include(FriendRequest.KEY_FROM_USER);
         query.findInBackground(new FindCallback<FriendRequest>() {
             @Override
@@ -55,10 +54,11 @@ public class FriendRequestsActivity extends AppCompatActivity {
                     return;
                 }
                 if (!friendRequests.isEmpty()) {
+                    List<ParseUser> requests = new ArrayList<>();
                     for (int i = 0; i < friendRequests.size(); i++) {
                         requests.add(friendRequests.get(i).getParseUser(FriendRequest.KEY_FROM_USER));
                     }
-                    adapter.notifyDataSetChanged();
+                    adapter.updateUsers(requests);
                 }
             }
         });

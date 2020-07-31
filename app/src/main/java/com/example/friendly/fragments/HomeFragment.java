@@ -35,7 +35,6 @@ public class HomeFragment extends Fragment {
 
     private RecyclerView recyclerviewStatuses;
     private StatusesAdapter adapter;
-    private List<Status> allStatuses;
 
     private SwipeRefreshLayout swipeContainer;
     private ProgressDialog progressDialog;
@@ -68,9 +67,8 @@ public class HomeFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                queryStatuses();
                 adapter.clear();
-                adapter.addAll(allStatuses);
+                queryStatuses();
                 swipeContainer.setRefreshing(false);
             }
         });
@@ -79,8 +77,7 @@ public class HomeFragment extends Fragment {
 
         //set up recyclerview with all active statuses
         recyclerviewStatuses = view.findViewById(R.id.recyclerview_statuses);
-        allStatuses = new ArrayList<>();
-        adapter = new StatusesAdapter(getContext(), allStatuses);
+        adapter = new StatusesAdapter(getContext());
         recyclerviewStatuses.setAdapter(adapter);
         recyclerviewStatuses.setLayoutManager(new LinearLayoutManager(getContext()));
         queryStatuses();
@@ -115,9 +112,10 @@ public class HomeFragment extends Fragment {
                     Log.e(TAG, "issue getting posts", e);
                     return;
                 }
-                if (!statuses.isEmpty()){
+                if (!statuses.isEmpty()) {
+                    List<Status> allStatuses = new ArrayList<>();
                     allStatuses.addAll(statuses);
-                    adapter.notifyDataSetChanged();
+                    adapter.updateStatuses(allStatuses);
                 }
                 progressDialog.dismiss();
             }

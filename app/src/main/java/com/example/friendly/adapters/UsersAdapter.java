@@ -33,13 +33,27 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
 
     private final Context context;
     private List<ParseUser> users;
-    private List<FriendRequest> requests;
     private List<ParseUser> friends;
 
-    public UsersAdapter(Context context, List<ParseUser> users) {
+    public UsersAdapter(Context context) {
         this.context = context;
-        this.users = users;
-        requests = new ArrayList<>();
+        users = new ArrayList<>();
+    }
+
+    public void updateUsers(List<ParseUser> list) {
+        users.clear();
+        users.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    public List<ParseUser> getUsers() {
+        return users;
+    }
+
+    // Clean all elements of the recycler
+    public void clear() {
+        users.clear();
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -156,17 +170,5 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
                 }
             }
         });
-    }
-
-    // Clean all elements of the recycler
-    public void clear() {
-        users.clear();
-        notifyDataSetChanged();
-    }
-
-    // Add a list of posts
-    public void addAll(List<ParseUser> list) {
-        users.addAll(list);
-        notifyDataSetChanged();
     }
 }

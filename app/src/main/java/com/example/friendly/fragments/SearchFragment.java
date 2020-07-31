@@ -42,7 +42,6 @@ public class SearchFragment extends Fragment {
 
     private RecyclerView recyclerviewUsers;
     private UsersAdapter adapter;
-    private List<ParseUser> allUsers;
 
     private SwipeRefreshLayout swipeContainer;
     private ProgressDialog progressDialog;
@@ -75,9 +74,8 @@ public class SearchFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                queryUsers();
                 adapter.clear();
-                adapter.addAll(allUsers);
+                queryUsers();
                 swipeContainer.setRefreshing(false);
             }
         });
@@ -89,8 +87,7 @@ public class SearchFragment extends Fragment {
 
         //set up recyclerview of users to search from
         recyclerviewUsers = view.findViewById(R.id.recyclerview_users);
-        allUsers = new ArrayList<>();
-        adapter = new UsersAdapter(getContext(), allUsers);
+        adapter = new UsersAdapter(getContext());
         recyclerviewUsers.setAdapter(adapter);
         recyclerviewUsers.setLayoutManager(new LinearLayoutManager(getContext()));
         queryUsers();
@@ -118,6 +115,7 @@ public class SearchFragment extends Fragment {
     private void filter(String text) {
         //new arraylist of filtered data
         List<ParseUser> filteredUsers = new ArrayList<>();
+        List<ParseUser> allUsers = adapter.getUsers();
 
         //add users to list if username matches
         for (ParseUser user : allUsers) {
@@ -161,8 +159,9 @@ public class SearchFragment extends Fragment {
                 }
                 // The query was successful.
                 if (!users.isEmpty()) {
+                    List<ParseUser> allUsers = new ArrayList<>();
                     allUsers.addAll(users);  //TODO don't add all users, instead add the users you need
-                    adapter.notifyDataSetChanged();
+                    adapter.updateUsers(allUsers);
                 }
                 progressDialog.dismiss();
             }

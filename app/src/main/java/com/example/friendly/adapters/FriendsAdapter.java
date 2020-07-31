@@ -19,6 +19,7 @@ import com.example.friendly.objects.FriendRemoval;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,9 +30,24 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     private final Context context;
     private List<ParseUser> users;
 
-    public FriendsAdapter(Context context, List<ParseUser> users) {
+    public FriendsAdapter(Context context) {
         this.context = context;
-        this.users = users;
+        users = new ArrayList<>();
+    }
+
+    public void updateUsers(List<ParseUser> list) {
+        users.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    // Clean all elements of the recycler
+    public void clear() {
+        users.clear();
+        notifyDataSetChanged();
+    }
+
+    public List<ParseUser> getUsers() {
+        return users;
     }
 
     @NonNull
@@ -131,15 +147,5 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         }
     }
 
-    // Clean all elements of the recycler
-    public void clear() {
-        users.clear();
-        notifyDataSetChanged();
-    }
 
-    // Add a list of posts
-    public void addAll(List<ParseUser> list) {
-        users.addAll(list);
-        notifyDataSetChanged();
-    }
 }
