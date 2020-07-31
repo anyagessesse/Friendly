@@ -163,7 +163,16 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
                     friendRequests.get(0).put(FriendRequest.KEY_ACCEPTED, true);
                     friendRequests.get(0).saveInBackground();
                     friends.add(itemUser);
-                    Collections.sort(friends, (o1, o2) -> o1.getUsername().compareTo(o2.getUsername()));
+
+                    Collections.sort(friends, (o1, o2) -> {
+                        try {
+                            return o1.fetchIfNeeded().getUsername().compareTo(o2.fetchIfNeeded().getUsername());
+                        } catch (ParseException ex) {
+                            ex.printStackTrace();
+                        }
+                        return 0;
+                    });
+
                     ParseUser.getCurrentUser().put("friends", friends);
                     ParseUser.getCurrentUser().saveInBackground();
                     Toast.makeText(context, context.getString((R.string.added_friend), itemUser.getUsername()), Toast.LENGTH_SHORT).show();

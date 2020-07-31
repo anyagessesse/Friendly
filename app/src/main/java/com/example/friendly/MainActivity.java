@@ -1,34 +1,24 @@
 package com.example.friendly;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-
 import com.example.friendly.fragments.HomeFragment;
 import com.example.friendly.fragments.ProfileFragment;
 import com.example.friendly.fragments.SearchFragment;
-import com.example.friendly.objects.FriendRemoval;
-import com.example.friendly.objects.FriendRequest;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 /**
- * main activity of the app, contains bottom nativation, toolbar, and fragments
+ * main activity of the app, contains bottom navigation, toolbar, and fragments
  */
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
@@ -59,10 +49,6 @@ public class MainActivity extends AppCompatActivity {
                 //goes to StatusUpdateActivity when user presses "post status" button
                 if (item.getItemId() == R.id.post_status) {
                     Intent intent = new Intent(MainActivity.this, StatusUpdateActivity.class);
-                    startActivity(intent);
-                }
-                if (item.getItemId() == R.id.friend_requests) {
-                    Intent intent = new Intent(MainActivity.this, FriendRequestsActivity.class);
                     startActivity(intent);
                 }
                 return true;

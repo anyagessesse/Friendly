@@ -1,6 +1,7 @@
 package com.example.friendly.fragments;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,8 +19,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.friendly.FriendRequestsActivity;
 import com.example.friendly.R;
 import com.example.friendly.adapters.UsersAdapter;
+import com.example.friendly.objects.FriendRequest;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -39,6 +43,7 @@ public class SearchFragment extends Fragment {
     private EditText searchBar;
     private Button searchButton; //TODO button currently does nothing, possibly remove or find use? maybe use to query users that match from database
     private String searchText;
+    private FloatingActionButton friendRequestNotif;
 
     private RecyclerView recyclerviewUsers;
     private UsersAdapter adapter;
@@ -84,6 +89,7 @@ public class SearchFragment extends Fragment {
 
         searchBar = view.findViewById(R.id.text_search);
         searchButton = view.findViewById(R.id.button_search);
+        friendRequestNotif = view.findViewById(R.id.friend_request_notif);
 
         //set up recyclerview of users to search from
         recyclerviewUsers = view.findViewById(R.id.recyclerview_users);
@@ -108,6 +114,40 @@ public class SearchFragment extends Fragment {
                 filter(searchText);
                 //adapter.clear();  //TODO try being able to search through large database of users
                 //queryUsers();
+            }
+        });
+
+        // check for requests
+        checkRequests();
+
+        // goes to friend request activity when clicked on
+        friendRequestNotif.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), FriendRequestsActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void checkRequests() {
+        // gets all current friend requests
+        ParseQuery<FriendRequest> query = ParseQuery.getQuery(FriendRequest.class);
+        query.whereEqualTo(FriendRequest.KEY_TO_USER, ParseUser.getCurrentUser());
+        query.whereEqualTo(FriendRequest.KEY_ACCEPTED, false);
+        query.include(FriendRequest.KEY_FROM_USER);
+        query.findInBackground(new FindCallback<FriendRequest>() {
+            @Override
+            public void done(List<FriendRequest> friendRequests, ParseException e) {
+                if (e != null) {
+                    //query unsuccessful
+                    Log.e(TAG, "issue getting requests", e);
+                    return;
+                }
+                if (!friendRequests.isEmpty()) {
+                    // change icon to notify user that there are requests
+                    friendRequestNotif.setImageResource(R.drawable.ic_baseline_notification_important_24);
+                }
             }
         });
     }
