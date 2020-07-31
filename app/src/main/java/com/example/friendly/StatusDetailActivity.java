@@ -52,7 +52,6 @@ import java.util.List;
 public class StatusDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
     public static final String TAG = "StatusDetailActivity";
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-    private static final int DEFAULT_ZOOM = 15;
 
     private ImageView profilePic;
     private TextView username;

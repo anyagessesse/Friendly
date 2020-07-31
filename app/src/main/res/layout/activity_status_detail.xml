@@ -17,7 +17,7 @@
         android:scaleType="centerCrop"
         android:transitionName="profilePic"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/map"
+        app:layout_constraintTop_toBottomOf="@+id/map_location"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -54,7 +54,7 @@
         android:textStyle="bold"
         android:transitionName="username"
         app:layout_constraintStart_toEndOf="@+id/image_profile_pic"
-        app:layout_constraintTop_toBottomOf="@+id/map"
+        app:layout_constraintTop_toBottomOf="@+id/map_location"
         tools:text="anyagess" />
 
     <TextView
@@ -64,7 +64,7 @@
         android:layout_marginTop="@dimen/margin_medium2"
         android:layout_marginEnd="@dimen/margin_small"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/map"
+        app:layout_constraintTop_toBottomOf="@+id/map_location"
         tools:text="Jul 17, 2020" />
 
     <TextView
