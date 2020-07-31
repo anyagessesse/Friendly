@@ -147,6 +147,9 @@ public class SearchFragment extends Fragment {
                 if (!friendRequests.isEmpty()) {
                     // change icon to notify user that there are requests
                     friendRequestNotif.setImageResource(R.drawable.ic_baseline_notification_important_24);
+                } else {
+                    // change icon to plain bell if no notification present
+                    friendRequestNotif.setImageResource(R.drawable.ic_baseline_notifications_24);
                 }
             }
         });
@@ -206,5 +209,12 @@ public class SearchFragment extends Fragment {
                 progressDialog.dismiss();
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // refresh the notification button after going back from requests page
+        checkRequests();
     }
 }
