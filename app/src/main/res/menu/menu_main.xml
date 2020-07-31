@@ -7,10 +7,4 @@
         android:title="@string/log_out"
         app:showAsAction="never" />
 
-    <item
-        android:id="@+id/post_status"
-        android:icon="@drawable/ic_baseline_add_comment_24"
-        android:title="@string/post_status"
-        app:showAsAction="ifRoom" />
-
 </menu>

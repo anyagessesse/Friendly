@@ -46,11 +46,6 @@ public class MainActivity extends AppCompatActivity {
                         goLoginActivity();
                     }
                 }
-                //goes to StatusUpdateActivity when user presses "post status" button
-                if (item.getItemId() == R.id.post_status) {
-                    Intent intent = new Intent(MainActivity.this, StatusUpdateActivity.class);
-                    startActivity(intent);
-                }
                 return true;
             }
         });

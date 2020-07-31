@@ -1,6 +1,7 @@
 package com.example.friendly.fragments;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,9 +15,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.friendly.MainActivity;
 import com.example.friendly.R;
+import com.example.friendly.StatusUpdateActivity;
 import com.example.friendly.adapters.StatusesAdapter;
 import com.example.friendly.objects.Status;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -38,6 +42,7 @@ public class HomeFragment extends Fragment {
 
     private SwipeRefreshLayout swipeContainer;
     private ProgressDialog progressDialog;
+    private FloatingActionButton postStatus;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -53,6 +58,8 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        postStatus = view.findViewById(R.id.post_status);
 
         // show progress dialog while waiting for query from Parse
         progressDialog = new ProgressDialog(getContext());
@@ -74,6 +81,15 @@ public class HomeFragment extends Fragment {
         });
         // Configure the refreshing colors
         swipeContainer.setColorSchemeResources(R.color.colorAccentDark);
+
+        // go to update status activity if button is pressed
+        postStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), StatusUpdateActivity.class);
+                startActivity(intent);
+            }
+        });
 
         //set up recyclerview with all active statuses
         recyclerviewStatuses = view.findViewById(R.id.recyclerview_statuses);
