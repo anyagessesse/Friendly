@@ -24,7 +24,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -135,33 +134,7 @@ public class StatusUpdateActivity extends AppCompatActivity implements OnMapRead
         startTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Calendar currentTime = Calendar.getInstance();
-                int hour = currentTime.get(Calendar.HOUR_OF_DAY);
-                int minute = currentTime.get(Calendar.MINUTE);
-
-                TimePickerDialog timePickerDialog;
-                timePickerDialog = new TimePickerDialog(StatusUpdateActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        // parse the time
-                        Calendar cal = Calendar.getInstance();
-                        cal.set(Calendar.HOUR_OF_DAY, selectedHour);
-                        cal.set(Calendar.MINUTE, selectedMinute);
-                        dateStart = cal.getTime();
-
-                        // get am or pm
-                        String am_pm = "";
-                        if (cal.get(Calendar.AM_PM) == Calendar.AM) {
-                            am_pm = "AM";
-                        } else if (cal.get(Calendar.AM_PM) == Calendar.PM) {
-                            am_pm = "PM";
-                            selectedHour = selectedHour - 12;
-                        }
-
-                        startTime.setText(selectedHour + ":" + selectedMinute + " " + am_pm);
-                    }
-                }, hour, minute, false);
-                timePickerDialog.show();
+                getTime(startTime);
             }
         });
 
@@ -169,33 +142,7 @@ public class StatusUpdateActivity extends AppCompatActivity implements OnMapRead
         endTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Calendar currentTime = Calendar.getInstance();
-                int hour = currentTime.get(Calendar.HOUR_OF_DAY);
-                int minute = currentTime.get(Calendar.MINUTE);
-
-                TimePickerDialog timePickerDialog;
-                timePickerDialog = new TimePickerDialog(StatusUpdateActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        // parse the time
-                        Calendar cal = Calendar.getInstance();
-                        cal.set(Calendar.HOUR_OF_DAY, selectedHour);
-                        cal.set(Calendar.MINUTE, selectedMinute);
-                        dateEnd = cal.getTime();
-
-                        // get am or pm
-                        String am_pm = "";
-                        if (cal.get(Calendar.AM_PM) == Calendar.AM) {
-                            am_pm = "AM";
-                        } else if (cal.get(Calendar.AM_PM) == Calendar.PM) {
-                            am_pm = "PM";
-                            selectedHour = selectedHour - 12;
-                        }
-
-                        endTime.setText(selectedHour + ":" + selectedMinute + " " + am_pm);
-                    }
-                }, hour, minute, false);
-                timePickerDialog.show();
+                getTime(endTime);
             }
         });
 
@@ -223,6 +170,37 @@ public class StatusUpdateActivity extends AppCompatActivity implements OnMapRead
                 }
             }
         });
+    }
+
+    // time-picker pops up and time is saved in EditText
+    private void getTime(EditText time) {
+        Calendar currentTime = Calendar.getInstance();
+        int hour = currentTime.get(Calendar.HOUR_OF_DAY);
+        int minute = currentTime.get(Calendar.MINUTE);
+
+        TimePickerDialog timePickerDialog;
+        timePickerDialog = new TimePickerDialog(StatusUpdateActivity.this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                // parse the time
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.HOUR_OF_DAY, selectedHour);
+                cal.set(Calendar.MINUTE, selectedMinute);
+                dateStart = cal.getTime();
+
+                // get am or pm
+                String am_pm = "";
+                if (cal.get(Calendar.AM_PM) == Calendar.AM) {
+                    am_pm = "AM";
+                } else if (cal.get(Calendar.AM_PM) == Calendar.PM) {
+                    am_pm = "PM";
+                    selectedHour = selectedHour - 12;
+                }
+
+                time.setText(selectedHour + ":" + selectedMinute + " " + am_pm);
+            }
+        }, hour, minute, false);
+        timePickerDialog.show();
     }
 
     private void setMapMarker() {
