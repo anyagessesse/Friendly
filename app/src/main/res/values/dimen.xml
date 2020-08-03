@@ -2,8 +2,8 @@
 <resources>
     <dimen name="margin_small">8dp</dimen>
     <dimen name="margin_medium">16dp</dimen>
-    <dimen name="margin_medium2">24dp</dimen>
-    <dimen name="margin_large">32dp</dimen>
+    <dimen name="margin_large">24dp</dimen>
+    <dimen name="margin_extra_large">32dp</dimen>
 
     <dimen name="profile_pic_small">40dp</dimen>
     <dimen name="profile_pic_large">180dp</dimen>
