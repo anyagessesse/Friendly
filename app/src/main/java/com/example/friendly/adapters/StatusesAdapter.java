@@ -32,7 +32,7 @@ import java.util.Locale;
 public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.ViewHolder> {
 
     private final Context context;
-    private List<Status> statuses;
+    private final List<Status> statuses;
     private static final int SECOND_MILLIS = 1000;
     private static final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
     private static final int HOUR_MILLIS = 60 * MINUTE_MILLIS;

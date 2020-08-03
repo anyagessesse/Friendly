@@ -32,7 +32,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
     public static final String TAG = "UsersAdapter";
 
     private final Context context;
-    private List<ParseUser> users;
+    private final List<ParseUser> users;
     private List<ParseUser> friends;
 
     public UsersAdapter(Context context) {
@@ -76,7 +76,8 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
     }
 
     public void filterList(List<ParseUser> filteredUsers) {
-        this.users = filteredUsers;
+        users.clear();
+        users.addAll(filteredUsers);
         notifyDataSetChanged();
     }
 

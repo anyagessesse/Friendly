@@ -47,6 +47,7 @@ public class SearchFragment extends Fragment {
 
     private RecyclerView recyclerviewUsers;
     private UsersAdapter adapter;
+    private List<ParseUser> allUsers;
 
     private SwipeRefreshLayout swipeContainer;
     private ProgressDialog progressDialog;
@@ -158,7 +159,6 @@ public class SearchFragment extends Fragment {
     private void filter(String text) {
         //new arraylist of filtered data
         List<ParseUser> filteredUsers = new ArrayList<>();
-        List<ParseUser> allUsers = adapter.getUsers();
 
         //add users to list if username matches
         for (ParseUser user : allUsers) {
@@ -202,7 +202,7 @@ public class SearchFragment extends Fragment {
                 }
                 // The query was successful.
                 if (!users.isEmpty()) {
-                    List<ParseUser> allUsers = new ArrayList<>();
+                    allUsers = new ArrayList<>();
                     allUsers.addAll(users);  //TODO don't add all users, instead add the users you need
                     adapter.updateUsers(allUsers);
                 }
