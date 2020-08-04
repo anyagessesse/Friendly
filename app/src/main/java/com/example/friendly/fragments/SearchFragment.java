@@ -1,6 +1,5 @@
 package com.example.friendly.fragments;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -50,7 +50,7 @@ public class SearchFragment extends Fragment {
     private List<ParseUser> allUsers;
 
     private SwipeRefreshLayout swipeContainer;
-    private ProgressDialog progressDialog;
+    private LinearLayout progressBar;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -69,12 +69,9 @@ public class SearchFragment extends Fragment {
 
         allUsers = new ArrayList<>();
 
-        // show progress dialog while waiting for query from Parse
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.setTitle(getString(R.string.loading));
-        progressDialog.setMessage(getString(R.string.wait));
-        progressDialog.setCancelable(false);
-        progressDialog.show();
+        // set up loading screen while waiting for Parse
+        progressBar = (LinearLayout) view.findViewById(R.id.layout_progress_bar);
+        progressBar.setVisibility(View.VISIBLE);
 
         // Lookup the swipe container view
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
@@ -232,7 +229,7 @@ public class SearchFragment extends Fragment {
                     allUsers.addAll(users);  //TODO don't add all users, instead add the users you need
                     adapter.updateUsers(allUsers);
                 }
-                progressDialog.dismiss();
+                progressBar.setVisibility(View.GONE);
             }
         });
     }

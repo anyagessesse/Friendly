@@ -61,4 +61,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_baseline_notifications_24" />
 
+    <include
+        android:id="@+id/layout_progress_bar"
+        android:visibility="gone"
+        layout="@layout/layout_progress_bar"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

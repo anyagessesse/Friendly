@@ -1,12 +1,12 @@
 package com.example.friendly.fragments;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.friendly.MainActivity;
 import com.example.friendly.R;
 import com.example.friendly.StatusUpdateActivity;
 import com.example.friendly.adapters.StatusesAdapter;
@@ -41,7 +40,7 @@ public class HomeFragment extends Fragment {
     private StatusesAdapter adapter;
 
     private SwipeRefreshLayout swipeContainer;
-    private ProgressDialog progressDialog;
+    private LinearLayout progressBar;
     private FloatingActionButton postStatus;
 
     public HomeFragment() {
@@ -61,12 +60,10 @@ public class HomeFragment extends Fragment {
 
         postStatus = view.findViewById(R.id.post_status);
 
-        // show progress dialog while waiting for query from Parse
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.setTitle(getString(R.string.loading));
-        progressDialog.setMessage(getString(R.string.wait));
-        progressDialog.setCancelable(false);
-        progressDialog.show();
+        // set up loading screen while waiting for Parse
+        progressBar = (LinearLayout) view.findViewById(R.id.layout_progress_bar);
+        progressBar.setVisibility(View.VISIBLE);
+
 
         // Lookup the swipe container view
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
@@ -133,7 +130,7 @@ public class HomeFragment extends Fragment {
                     allStatuses.addAll(statuses);
                     adapter.updateStatuses(allStatuses);
                 }
-                progressDialog.dismiss();
+                progressBar.setVisibility(View.GONE);
             }
         });
     }
