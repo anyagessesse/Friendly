@@ -21,6 +21,7 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.friendly.R;
@@ -57,6 +58,7 @@ public class ProfileFragment extends Fragment {
     private Button changeProfilePic;
     private ProgressBar loadingProfilePic;
 
+    private SwipeRefreshLayout swipeContainer;
     private RecyclerView recyclerviewFriends;
     private FriendsAdapter adapter;
 
@@ -91,6 +93,19 @@ public class ProfileFragment extends Fragment {
             profilePic.setVisibility(View.VISIBLE);
         }
         username.setText(curUser.getUsername());
+
+        // Lookup the swipe container view
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                queryFriends();
+                swipeContainer.setRefreshing(false);
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(R.color.colorAccentDark);
 
         //set up recyclerview of friends
         recyclerviewFriends = view.findViewById(R.id.recyclerview_friends);
