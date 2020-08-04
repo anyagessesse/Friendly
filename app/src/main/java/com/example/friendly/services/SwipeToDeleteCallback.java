@@ -21,7 +21,7 @@ public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
     private Drawable icon;
 
     public SwipeToDeleteCallback(UsersAdapter adapter) {
-        super(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+        super(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
         mAdapter = adapter;
         icon = ContextCompat.getDrawable(mAdapter.getContext(),
                 R.drawable.ic_baseline_delete_24);

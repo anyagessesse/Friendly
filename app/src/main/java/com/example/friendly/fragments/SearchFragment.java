@@ -146,7 +146,7 @@ public class SearchFragment extends Fragment {
                     Log.e(TAG, "issue getting requests", e);
                     return;
                 }
-                ParseUser.getCurrentUser().put("requests",new ArrayList<>());
+                ParseUser.getCurrentUser().put("requests", new ArrayList<>());
                 //ParseUser.getCurrentUser().getList("requests").clear();
                 ParseUser.getCurrentUser().saveInBackground();
                 for (int i = 0; i < receivedRequests.size(); i++) {
