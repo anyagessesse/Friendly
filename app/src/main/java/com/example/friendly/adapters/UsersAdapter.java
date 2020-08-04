@@ -139,6 +139,15 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
     private void undoDelete() {
         users.add(recentlyDeletedUserPosition, recentlyDeletedUser);
         notifyItemInserted(recentlyDeletedUserPosition);
+        addRequest(recentlyDeletedUser);
+    }
+
+    private void addRequest(ParseUser recentlyDeletedUser) {
+        FriendRequest request = new FriendRequest();
+        request.setAccepted(false);
+        request.setToUser(ParseUser.getCurrentUser());
+        request.setFromUser(recentlyDeletedUser);
+        request.saveInBackground();
     }
 
     /**
