@@ -14,11 +14,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.friendly.R;
 import com.example.friendly.adapters.UsersAdapter;
 
+/**
+ * Handles deleting a request when user swipes on a friend request
+ */
 public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
 
-    private UsersAdapter mAdapter;
+    private final UsersAdapter mAdapter;
     private final ColorDrawable background;
-    private Drawable icon;
+    private final Drawable icon;
 
     public SwipeToDeleteCallback(UsersAdapter adapter) {
         super(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
