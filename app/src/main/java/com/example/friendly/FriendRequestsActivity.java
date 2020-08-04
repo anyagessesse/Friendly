@@ -1,6 +1,7 @@
 package com.example.friendly;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -9,6 +10,7 @@ import android.util.Log;
 
 import com.example.friendly.adapters.UsersAdapter;
 import com.example.friendly.objects.FriendRequest;
+import com.example.friendly.services.SwipeToDeleteCallback;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -25,6 +27,7 @@ public class FriendRequestsActivity extends AppCompatActivity {
 
     private RecyclerView recyclerviewFriendRequests;
     private UsersAdapter adapter;
+    private SwipeToDeleteCallback swipeHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,9 @@ public class FriendRequestsActivity extends AppCompatActivity {
         adapter = new UsersAdapter(this);
         recyclerviewFriendRequests.setAdapter(adapter);
         recyclerviewFriendRequests.setLayoutManager(new LinearLayoutManager(this));
+        swipeHandler = new SwipeToDeleteCallback(adapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(swipeHandler);
+        touchHelper.attachToRecyclerView(recyclerviewFriendRequests);
         queryRequests();
     }
 

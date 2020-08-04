@@ -13,8 +13,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.friendly.FriendRequestsActivity;
 import com.example.friendly.R;
 import com.example.friendly.objects.FriendRequest;
+import com.google.android.material.snackbar.Snackbar;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -31,9 +33,12 @@ import java.util.List;
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> {
     public static final String TAG = "UsersAdapter";
 
+    private View layoutView;
     private final Context context;
     private final List<ParseUser> users;
     private List<ParseUser> friends;
+    private ParseUser recentlyDeletedUser;
+    private int recentlyDeletedUserPosition;
 
     public UsersAdapter(Context context) {
         this.context = context;
@@ -59,8 +64,8 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
     @NonNull
     @Override
     public UsersAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_user, parent, false);
-        return new ViewHolder(view);
+        layoutView = LayoutInflater.from(context).inflate(R.layout.item_user, parent, false);
+        return new ViewHolder(layoutView);
     }
 
     @Override
@@ -79,6 +84,61 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         users.clear();
         users.addAll(filteredUsers);
         notifyDataSetChanged();
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void deleteItem(int position) {
+        recentlyDeletedUser = users.get(position);
+        recentlyDeletedUserPosition = position;
+
+        // delete the request in Parse server
+        deleteRequest(recentlyDeletedUser);
+
+        // remove the item from the recyclerview
+        users.remove(position);
+        notifyItemRemoved(position);
+        showUndoSnackbar();
+    }
+
+    private void deleteRequest(ParseUser recentlyDeletedUser) {
+        // queries all requests to delete the selected request
+        ParseQuery<FriendRequest> query = ParseQuery.getQuery(FriendRequest.class);
+        query.whereEqualTo(FriendRequest.KEY_FROM_USER, recentlyDeletedUser);
+        query.whereEqualTo(FriendRequest.KEY_TO_USER, ParseUser.getCurrentUser());
+        query.findInBackground(new FindCallback<FriendRequest>() {
+            @Override
+            public void done(List<FriendRequest> objects, ParseException e) {
+                if (e != null) {
+                    //query unsuccessful
+                    Log.e(TAG, "issue getting requests", e);
+                    return;
+                }
+                if (objects != null) {
+                    FriendRequest request = objects.get(0);
+                    try {
+                        request.delete();
+                        request.saveInBackground();
+                    } catch (ParseException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+
+            }
+        });
+    }
+
+    private void showUndoSnackbar() {
+        Snackbar snackbar = Snackbar.make(layoutView, R.string.snack_bar_text, Snackbar.LENGTH_LONG);
+        snackbar.setAction(R.string.snack_bar_undo, v -> undoDelete());
+        snackbar.show();
+    }
+
+    private void undoDelete() {
+        users.add(recentlyDeletedUserPosition, recentlyDeletedUser);
+        notifyItemInserted(recentlyDeletedUserPosition);
     }
 
     /**
@@ -124,6 +184,8 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
             users.remove(getPosition());
             notifyItemRemoved(getPosition());
         }
+
+
     }
 
     private void handleRequest(ParseUser itemUser) {
@@ -131,7 +193,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         query.whereEqualTo(FriendRequest.KEY_TO_USER, ParseUser.getCurrentUser());
         query.whereEqualTo(FriendRequest.KEY_FROM_USER, itemUser);
         query.include(FriendRequest.KEY_TO_USER);
-        query.findInBackground(new FindCallback<FriendRequest>() {
+        query.findInBackground(new FindCallback<FriendRequest>() {  //TODO consider separating this into multiple methods
             @Override
             public void done(List<FriendRequest> friendRequests, ParseException e) {
                 if (e != null) {

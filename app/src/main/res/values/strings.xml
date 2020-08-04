@@ -45,4 +45,7 @@
 
     <string name="post_warning">Please enter an end time and location.</string>
     <string name="ok">Ok</string>
+
+    <string name="snack_bar_text">This friend request has been deleted.</string>
+    <string name="snack_bar_undo">UNDO</string>
 </resources>

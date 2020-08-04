@@ -103,12 +103,12 @@ public class ProfileFragment extends Fragment {
         changeProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                launchCamera();  //TODO make loading bar while new profile pic loads
+                launchCamera();
             }
         });
     }
 
-    private void queryFriends() {
+    private void queryFriends() {  //TODO break up this method into separate methods
         List<ParseUser> newFriends = ParseUser.getCurrentUser().getList("friends");
         // check if any friend requests have been accepted
         ParseQuery<FriendRequest> query = ParseQuery.getQuery(FriendRequest.class);

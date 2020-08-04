@@ -67,6 +67,8 @@ public class SearchFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        allUsers = new ArrayList<>();
+
         // show progress dialog while waiting for query from Parse
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setTitle(getString(R.string.loading));
@@ -119,7 +121,8 @@ public class SearchFragment extends Fragment {
         });
 
         // check for requests
-        checkRequests();
+        checkReceivedRequests();
+        checkSentRequests();
 
         // goes to friend request activity when clicked on
         friendRequestNotif.setOnClickListener(new View.OnClickListener() {
@@ -131,8 +134,31 @@ public class SearchFragment extends Fragment {
         });
     }
 
-    private void checkRequests() {
-        // gets all current friend requests
+    private void checkSentRequests() {
+        // gets all current friend requests from current user
+        ParseQuery<FriendRequest> query = ParseQuery.getQuery(FriendRequest.class);
+        query.whereEqualTo(FriendRequest.KEY_FROM_USER, ParseUser.getCurrentUser());
+        query.findInBackground(new FindCallback<FriendRequest>() {
+            @Override
+            public void done(List<FriendRequest> receivedRequests, ParseException e) {
+                if (e != null) {
+                    //query unsuccessful
+                    Log.e(TAG, "issue getting requests", e);
+                    return;
+                }
+                ParseUser.getCurrentUser().put("requests",new ArrayList<>());
+                //ParseUser.getCurrentUser().getList("requests").clear();
+                ParseUser.getCurrentUser().saveInBackground();
+                for (int i = 0; i < receivedRequests.size(); i++) {
+                    ParseUser.getCurrentUser().getList("requests").add(receivedRequests.get(i).getToUser());
+                }
+                ParseUser.getCurrentUser().saveInBackground();
+            }
+        });
+    }
+
+    private void checkReceivedRequests() {
+        // gets all current friend requests to current user
         ParseQuery<FriendRequest> query = ParseQuery.getQuery(FriendRequest.class);
         query.whereEqualTo(FriendRequest.KEY_TO_USER, ParseUser.getCurrentUser());
         query.whereEqualTo(FriendRequest.KEY_ACCEPTED, false);
@@ -185,9 +211,9 @@ public class SearchFragment extends Fragment {
         friendIds.add(ParseUser.getCurrentUser().getObjectId());
 
         // get objectId for each user currently requested
-        List<ParseUser> requests = ParseUser.getCurrentUser().getList("requests");
-        for (int j = 0; j < requests.size(); j++) {
-            friendIds.add(requests.get(j).getObjectId());
+        List<ParseUser> requestsList = ParseUser.getCurrentUser().getList("requests");
+        for (int j = 0; j < requestsList.size(); j++) {
+            friendIds.add(requestsList.get(j).getObjectId());
         }
 
         query.whereNotContainedIn("objectId", friendIds);
@@ -215,6 +241,6 @@ public class SearchFragment extends Fragment {
     public void onResume() {
         super.onResume();
         // refresh the notification button after going back from requests page
-        checkRequests();
+        checkReceivedRequests();
     }
 }
