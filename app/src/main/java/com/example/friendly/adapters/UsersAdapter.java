@@ -198,11 +198,12 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
     }
 
     private void handleRequest(ParseUser itemUser) {
+        // accept the friend request or create a new friend request
         ParseQuery<FriendRequest> query = ParseQuery.getQuery(FriendRequest.class);
         query.whereEqualTo(FriendRequest.KEY_TO_USER, ParseUser.getCurrentUser());
         query.whereEqualTo(FriendRequest.KEY_FROM_USER, itemUser);
         query.include(FriendRequest.KEY_TO_USER);
-        query.findInBackground(new FindCallback<FriendRequest>() {  //TODO consider separating this into multiple methods
+        query.findInBackground(new FindCallback<FriendRequest>() {
             @Override
             public void done(List<FriendRequest> friendRequests, ParseException e) {
                 if (e != null) {
@@ -211,44 +212,55 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
                     return;
                 }
                 if (friendRequests.isEmpty()) {
-                    //creates a new friend request if there isn't currently a request between the current user and clicked user
-                    FriendRequest friendRequest = new FriendRequest();
-                    friendRequest.setFromUser(ParseUser.getCurrentUser());
-                    friendRequest.setToUser(itemUser);
-                    friendRequest.setAccepted(false);
-                    friendRequest.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e != null) {
-                                //status unsuccessfully added to db
-                                Log.e(TAG, "issue when saving post", e);
-                                return;
-                            }
-                            // add the user to pending friend requests list for that user
-                            ParseUser.getCurrentUser().add("requests", itemUser);
-                            ParseUser.getCurrentUser().saveInBackground();
-                            Toast.makeText(context, context.getString((R.string.request_sent), itemUser.getUsername()), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    // there is no active friend request
+                    createNewFriendRequest(friendRequests, itemUser);
                 } else {
-                    //if there is a request then the request gets accepted and the friend is added to friends list
-                    friendRequests.get(0).put(FriendRequest.KEY_ACCEPTED, true);
-                    friendRequests.get(0).saveInBackground();
-                    friends.add(itemUser);
-
-                    Collections.sort(friends, (o1, o2) -> {
-                        try {
-                            return o1.fetchIfNeeded().getUsername().compareTo(o2.fetchIfNeeded().getUsername());
-                        } catch (ParseException ex) {
-                            ex.printStackTrace();
-                        }
-                        return 0;
-                    });
-
-                    ParseUser.getCurrentUser().put("friends", friends);
-                    ParseUser.getCurrentUser().saveInBackground();
-                    Toast.makeText(context, context.getString((R.string.added_friend), itemUser.getUsername()), Toast.LENGTH_SHORT).show();
+                    acceptFriendRequest(friendRequests, itemUser);
                 }
+
+            }
+        });
+    }
+
+    private void acceptFriendRequest(List<FriendRequest> friendRequests, ParseUser itemUser) {
+        //if there is a request then the request gets accepted and the friend is added to friends list
+        friendRequests.get(0).put(FriendRequest.KEY_ACCEPTED, true);
+        friendRequests.get(0).saveInBackground();
+        friends.add(itemUser);
+
+        // sort new friend in list
+        Collections.sort(friends, (o1, o2) -> {
+            try {
+                return o1.fetchIfNeeded().getUsername().compareTo(o2.fetchIfNeeded().getUsername());
+            } catch (ParseException ex) {
+                ex.printStackTrace();
+            }
+            return 0;
+        });
+
+        ParseUser.getCurrentUser().put("friends", friends);
+        ParseUser.getCurrentUser().saveInBackground();
+        Toast.makeText(context, context.getString((R.string.added_friend), itemUser.getUsername()), Toast.LENGTH_SHORT).show();
+    }
+
+    private void createNewFriendRequest(List<FriendRequest> friendRequests, ParseUser itemUser) {
+        //creates a new friend request if there isn't currently a request between the current user and clicked user
+        FriendRequest friendRequest = new FriendRequest();
+        friendRequest.setFromUser(ParseUser.getCurrentUser());
+        friendRequest.setToUser(itemUser);
+        friendRequest.setAccepted(false);
+        friendRequest.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    //status unsuccessfully added to db
+                    Log.e(TAG, "issue when saving post", e);
+                    return;
+                }
+                // add the user to pending friend requests list for that user
+                ParseUser.getCurrentUser().add("requests", itemUser);
+                ParseUser.getCurrentUser().saveInBackground();
+                Toast.makeText(context, context.getString((R.string.request_sent), itemUser.getUsername()), Toast.LENGTH_SHORT).show();
             }
         });
     }
