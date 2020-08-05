@@ -45,7 +45,6 @@ public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.ViewHo
     }
 
     public void updateStatuses(List<Status> list) {
-        statuses.clear();
         statuses.addAll(list);
         notifyDataSetChanged();
     }

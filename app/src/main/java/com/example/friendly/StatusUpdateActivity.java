@@ -225,8 +225,12 @@ public class StatusUpdateActivity extends AppCompatActivity implements OnMapRead
         if (endDate != null) {
             newStatus.put("endTime", endDate);
         }
-        newStatus.put("state", stateName);
-        newStatus.put("city", cityName);
+        if (stateName != null) {
+            newStatus.put("state", stateName);
+        }
+        if (cityName != null) {
+            newStatus.put("city", cityName);
+        }
         if (lat != null) {
             newStatus.put("latitude", lat);
             newStatus.put("longitude", lon);

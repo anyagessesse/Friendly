@@ -200,7 +200,7 @@ public class ProfileFragment extends Fragment {
                 // remove the user from pending friend requests list for that user
                 List<ParseUser> requests = ParseUser.getCurrentUser().getList("requests");
                 for (int j = 0; j < requests.size(); j++) {
-                    if (requests.get(j).getObjectId().equals(friendRequests.get(j).getParseUser("toUser").getObjectId())) {
+                    if (requests.get(j).getObjectId().equals(friendRequests.get(i).getParseUser("toUser").getObjectId())) {
                         requests.remove(j);
                     }
                 }

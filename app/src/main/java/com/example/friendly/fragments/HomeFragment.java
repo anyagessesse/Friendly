@@ -19,6 +19,7 @@ import com.example.friendly.R;
 import com.example.friendly.StatusUpdateActivity;
 import com.example.friendly.adapters.StatusesAdapter;
 import com.example.friendly.objects.Status;
+import com.example.friendly.services.EndlessRecyclerViewScrollListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -38,8 +39,10 @@ public class HomeFragment extends Fragment {
 
     private RecyclerView recyclerviewStatuses;
     private StatusesAdapter adapter;
-
     private SwipeRefreshLayout swipeContainer;
+    private EndlessRecyclerViewScrollListener scrollListener;
+    private int skipIndex;
+
     private LinearLayout progressBar;
     private FloatingActionButton postStatus;
 
@@ -71,6 +74,7 @@ public class HomeFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                skipIndex = 0;
                 adapter.clear();
                 queryStatuses();
                 swipeContainer.setRefreshing(false);
@@ -89,11 +93,23 @@ public class HomeFragment extends Fragment {
         });
 
         //set up recyclerview with all active statuses
+        skipIndex = 0;
         recyclerviewStatuses = view.findViewById(R.id.recyclerview_statuses);
         adapter = new StatusesAdapter(getContext());
         recyclerviewStatuses.setAdapter(adapter);
-        recyclerviewStatuses.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        recyclerviewStatuses.setLayoutManager(linearLayoutManager);
         queryStatuses();
+
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+
+                queryStatuses();
+            }
+        };
+
+        recyclerviewStatuses.addOnScrollListener(scrollListener);
     }
 
     //TODO change query statuses to only update the one new status instead of reloading all statuses
@@ -115,7 +131,9 @@ public class HomeFragment extends Fragment {
         ParseQuery<Status> query = ParseQuery.or(queries);
 
         query.include(Status.KEY_USER);
-        query.setLimit(10); //TODO change limit
+        query.setLimit(10);
+        query.setSkip(skipIndex);
+        skipIndex += 10;
         query.addDescendingOrder(Status.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<Status>() {
             @Override
