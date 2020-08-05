@@ -31,7 +31,6 @@ import com.example.friendly.objects.FriendRequest;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -123,8 +122,19 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    private void queryFriends() {  //TODO break up this method into separate methods
-        List<ParseUser> newFriends = ParseUser.getCurrentUser().getList("friends");
+    private void queryFriends() {
+        // add friends that have accepted requests and delete friends that have removed friendship
+        handleRequestsAndRemovals();
+
+        //gets all users in friends array
+        if (ParseUser.getCurrentUser().getList("friends") != null) {
+            List<ParseUser> allFriends = new ArrayList<>(ParseUser.getCurrentUser().getList("friends"));
+            adapter.clear();
+            adapter.updateUsers(allFriends);
+        }
+    }
+
+    private void handleRequestsAndRemovals() {
         // check if any friend requests have been accepted
         ParseQuery<FriendRequest> query = ParseQuery.getQuery(FriendRequest.class);
         query.whereEqualTo(FriendRequest.KEY_FROM_USER, ParseUser.getCurrentUser());
@@ -138,79 +148,79 @@ public class ProfileFragment extends Fragment {
                     return;
                 }
                 if (!friendRequests.isEmpty()) {
-                    for (int i = 0; i < friendRequests.size(); i++) {
-                        // adds the accepted friend to friends list
-                        if (friendRequests.get(i).getBoolean(FriendRequest.KEY_ACCEPTED)) {
-                            newFriends.add(friendRequests.get(i).getParseUser("toUser"));
-
-                            // remove the user from pending friend requests list for that user
-                            List<ParseUser> requests = ParseUser.getCurrentUser().getList("requests");
-                            for (int j = 0; j < requests.size(); j++) {
-                                if (requests.get(j).getObjectId().equals(friendRequests.get(j).getParseUser("toUser").getObjectId())) {
-                                    requests.remove(j);
-                                }
-                            }
-                            requests.remove(friendRequests.get(i).getParseUser("toUser"));
-                            ParseUser.getCurrentUser().put("requests", requests);
-                            ParseUser.getCurrentUser().saveInBackground();
-
-                            // deleting the friend request
-                            try {
-                                FriendRequest request = friendRequests.get(i);
-                                request.delete();
-                                request.saveInBackground();
-                            } catch (ParseException ex) {
-                                ex.printStackTrace();
-                            }
-                        }
-                    }
-                    // save the updated list of friends in Parse server
-                    ParseUser.getCurrentUser().put("friends", newFriends);
-                    ParseUser.getCurrentUser().saveInBackground();
+                    // add friends that have accepted the friend request
+                    addFriends(friendRequests);
                 }
                 // after requests are handled, remove all users that have removed friendship
-                ParseQuery<FriendRemoval> removalQuery = ParseQuery.getQuery(FriendRemoval.class);
-                removalQuery.whereEqualTo(FriendRemoval.KEY_TO_USER, ParseUser.getCurrentUser());
-                removalQuery.include(FriendRemoval.KEY_FROM_USER);
-                removalQuery.findInBackground(new FindCallback<FriendRemoval>() {
-                    @Override
-                    public void done(List<FriendRemoval> friendRemovals, ParseException e) {
-                        if (e != null) {
-                            //query unsuccessful
-                            Log.e(TAG, "issue getting removals", e);
-                            return;
-                        }
-                        if (!friendRemovals.isEmpty()) {
-                            List<ParseUser> removeFriends = new ArrayList<>();
+                removeFriends();
+            }
+        });
+    }
 
-                            // add users to list of removeFriends and delete the friend removals objects
-                            for (int i = 0; i < friendRemovals.size(); i++) {
-                                removeFriends.add(friendRemovals.get(i).getFromUser());
-                                FriendRemoval friendRemoval = friendRemovals.get(i);
-                                try {
-                                    friendRemoval.delete();
-                                    friendRemoval.saveInBackground();
-                                } catch (ParseException ex) {
-                                    ex.printStackTrace();
-                                }
-                            }
-                            ParseUser.getCurrentUser().removeAll("friends", removeFriends);
-                            ParseUser.getCurrentUser().saveInBackground();
+    private void removeFriends() {
+        ParseQuery<FriendRemoval> removalQuery = ParseQuery.getQuery(FriendRemoval.class);
+        removalQuery.whereEqualTo(FriendRemoval.KEY_TO_USER, ParseUser.getCurrentUser());
+        removalQuery.include(FriendRemoval.KEY_FROM_USER);
+        removalQuery.findInBackground(new FindCallback<FriendRemoval>() {
+            @Override
+            public void done(List<FriendRemoval> friendRemovals, ParseException e) {
+                if (e != null) {
+                    //query unsuccessful
+                    Log.e(TAG, "issue getting removals", e);
+                    return;
+                }
+                if (!friendRemovals.isEmpty()) {
+                    List<ParseUser> removeFriends = new ArrayList<>();
+
+                    // add users to list of removeFriends and delete the friend removals objects
+                    for (int i = 0; i < friendRemovals.size(); i++) {
+                        removeFriends.add(friendRemovals.get(i).getFromUser());
+                        FriendRemoval friendRemoval = friendRemovals.get(i);
+                        try {
+                            friendRemoval.delete();
+                            friendRemoval.saveInBackground();
+                        } catch (ParseException ex) {
+                            ex.printStackTrace();
                         }
                     }
-                });
+                    ParseUser.getCurrentUser().removeAll("friends", removeFriends);
+                    ParseUser.getCurrentUser().saveInBackground();
+                }
             }
-
-
         });
-        //gets all users in friends array
-        if (ParseUser.getCurrentUser().getList("friends") != null) {
-            List<ParseUser> allFriends = new ArrayList<>();
-            allFriends.addAll(ParseUser.getCurrentUser().getList("friends"));
-            adapter.clear();
-            adapter.updateUsers(allFriends);
-        }
+    }
 
+    private void addFriends(List<FriendRequest> friendRequests) {
+        List<ParseUser> newFriends = ParseUser.getCurrentUser().getList("friends");
+        for (int i = 0; i < friendRequests.size(); i++) {
+            // adds the accepted friend to friends list
+            if (friendRequests.get(i).getBoolean(FriendRequest.KEY_ACCEPTED)) {
+                newFriends.add(friendRequests.get(i).getParseUser("toUser"));
+
+                // remove the user from pending friend requests list for that user
+                List<ParseUser> requests = ParseUser.getCurrentUser().getList("requests");
+                for (int j = 0; j < requests.size(); j++) {
+                    if (requests.get(j).getObjectId().equals(friendRequests.get(j).getParseUser("toUser").getObjectId())) {
+                        requests.remove(j);
+                    }
+                }
+                requests.remove(friendRequests.get(i).getParseUser("toUser"));
+                ParseUser.getCurrentUser().put("requests", requests);
+                ParseUser.getCurrentUser().saveInBackground();
+
+                // deleting the friend request
+                try {
+                    FriendRequest request = friendRequests.get(i);
+                    request.delete();
+                    request.saveInBackground();
+                } catch (ParseException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        // save the updated list of friends in Parse server
+        ParseUser.getCurrentUser().put("friends", newFriends);
+        ParseUser.getCurrentUser().saveInBackground();
     }
 
     private void launchCamera() {
