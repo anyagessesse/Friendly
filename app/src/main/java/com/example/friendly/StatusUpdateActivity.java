@@ -118,7 +118,7 @@ public class StatusUpdateActivity extends AppCompatActivity implements OnMapRead
                 try {
                     List<Address> addresses = geocoder.getFromLocation(lat, lon, 1);
                     stateName = addresses.get(0).getAdminArea();
-                    cityName = addresses.get(0).getLocality();     //TODO include country or go back to add international places?
+                    cityName = addresses.get(0).getLocality();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -190,7 +190,7 @@ public class StatusUpdateActivity extends AppCompatActivity implements OnMapRead
                 } else {
                     dateEnd = cal.getTime();
                 }
-                
+
                 // get am or pm
                 String am_pm = "";
                 if (cal.get(Calendar.AM_PM) == Calendar.AM) {

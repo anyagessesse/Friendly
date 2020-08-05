@@ -1,5 +1,6 @@
 package com.example.friendly;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -84,7 +85,7 @@ public class StatusDetailActivity extends AppCompatActivity implements OnMapRead
             Glide.with(this).load(status.getUser().getParseFile("profilePic").getUrl()).circleCrop().into(profilePic);
         }
         //change format of date created
-        SimpleDateFormat parser = new SimpleDateFormat("MMM d, yyyy"); //TODO change time format to something better looking
+        SimpleDateFormat parser = new SimpleDateFormat("MMM d, yyyy");
         Date statusDate = status.getCreatedAt();
         String formattedDate = parser.format(statusDate);
         this.date.setText(formattedDate);
@@ -116,34 +117,39 @@ public class StatusDetailActivity extends AppCompatActivity implements OnMapRead
         // show delete button if the status is of the logged in user
         if (status.getUser().getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
             deleteStatus.setVisibility(View.VISIBLE);
-            deleteStatus.setOnClickListener(new View.OnClickListener() {  // TODO turn this into a standalone class to make onCreate smaller
+            deleteStatus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // launch dialog to confirm deleting the status
-                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                    builder.setMessage(getString(R.string.confirm_delete))
-                            .setCancelable(false)
-                            .setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    // deleted the status and navigate back to main
-                                    try {
-                                        status.delete();
-                                        status.saveInBackground();
-                                    } catch (ParseException e) {
-                                        e.printStackTrace();
-                                    }
-                                    Intent intent = new Intent(StatusDetailActivity.this, MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                            })
-                            .setNegativeButton(getString(R.string.cancel), null);
-                    AlertDialog alert = builder.create();
-                    alert.show();
+                    showConfirmationDialog(view.getContext());
                 }
             });
         }
     }
+
+    private void showConfirmationDialog(Context context) {
+        // launch dialog to confirm deleting the status
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage(getString(R.string.confirm_delete))
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // deleted the status and navigate back to main
+                        try {
+                            status.delete();
+                            status.saveInBackground();
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        Intent intent = new Intent(StatusDetailActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                })
+                .setNegativeButton(getString(R.string.cancel), null);
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
