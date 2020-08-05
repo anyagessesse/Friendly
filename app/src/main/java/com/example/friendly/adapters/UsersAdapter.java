@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.friendly.FriendRequestsActivity;
 import com.example.friendly.R;
 import com.example.friendly.objects.FriendRequest;
 import com.google.android.material.snackbar.Snackbar;

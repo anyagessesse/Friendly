@@ -56,7 +56,7 @@ public class StatusUpdateActivity extends AppCompatActivity implements OnMapRead
 
     private Status newStatus;
     private Date dateStart;
-    private Date dateEnd; // TODO fix this variable
+    private Date dateEnd;
     private String stateName = "";
     private String cityName = "";
 
@@ -134,7 +134,7 @@ public class StatusUpdateActivity extends AppCompatActivity implements OnMapRead
         startTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getTime(startTime);
+                getTime(startTime, true);
             }
         });
 
@@ -142,7 +142,7 @@ public class StatusUpdateActivity extends AppCompatActivity implements OnMapRead
         endTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getTime(endTime);
+                getTime(endTime, false);
             }
         });
 
@@ -173,21 +173,24 @@ public class StatusUpdateActivity extends AppCompatActivity implements OnMapRead
     }
 
     // time-picker pops up and time is saved in EditText
-    private void getTime(EditText time) {
+    private void getTime(EditText time, Boolean isStartTime) {
         Calendar currentTime = Calendar.getInstance();
         int hour = currentTime.get(Calendar.HOUR_OF_DAY);
         int minute = currentTime.get(Calendar.MINUTE);
 
-        TimePickerDialog timePickerDialog;
-        timePickerDialog = new TimePickerDialog(StatusUpdateActivity.this, new TimePickerDialog.OnTimeSetListener() {
+        TimePickerDialog timePickerDialog = new TimePickerDialog(StatusUpdateActivity.this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                 // parse the time
                 Calendar cal = Calendar.getInstance();
                 cal.set(Calendar.HOUR_OF_DAY, selectedHour);
                 cal.set(Calendar.MINUTE, selectedMinute);
-                dateStart = cal.getTime();
-
+                if (isStartTime) {
+                    dateStart = cal.getTime();
+                } else {
+                    dateEnd = cal.getTime();
+                }
+                
                 // get am or pm
                 String am_pm = "";
                 if (cal.get(Calendar.AM_PM) == Calendar.AM) {
