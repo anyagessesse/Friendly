@@ -28,7 +28,7 @@ Allows users to more easily plan when they will spend time with friends. When a 
 - [x] user can see active "I'm free" statuses of their friends
 - [ ] user can update status to "I'm free" which sends notifications to friends
     - [x] User can write a persionalized message about what they want to do during that time and what city/where they are
-- [ ] User can delete/hide their status once it is no longer needed
+- [x] User can delete/hide their status once it is no longer needed
 - [x] user can search for their friends by username
 - [x] user can add and remove friends
 - [x] user can view their profile page with their friends list and profile picture
