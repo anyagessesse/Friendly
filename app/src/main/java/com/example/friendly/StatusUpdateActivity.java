@@ -56,10 +56,10 @@ public class StatusUpdateActivity extends AppCompatActivity implements OnMapRead
 
     private Status newStatus;
     private Date dateStart;
-    private Date dateEnd;
-
+    private Date dateEnd; // TODO fix this variable
     private String stateName = "";
     private String cityName = "";
+
     private Double lat;
     private Double lon;
     private SupportMapFragment mapFragment;
