@@ -34,6 +34,7 @@ import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ public class ProfileFragment extends Fragment {
     private TextView username;
     private ImageView profilePic;
     private Button changeProfilePic;
-    private ProgressBar loadingProfilePic;
+    private AVLoadingIndicatorView loadingProfilePic;
 
     private SwipeRefreshLayout swipeContainer;
     private RecyclerView recyclerviewFriends;
