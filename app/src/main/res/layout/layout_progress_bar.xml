@@ -20,6 +20,6 @@
         android:gravity="center"
         android:textColor="@color/colorPrimary"
         android:layout_marginTop="@dimen/margin_small"
-        android:text="Please wait ..."/>
+        android:text="@string/please_wait"/>
 
 </LinearLayout>
