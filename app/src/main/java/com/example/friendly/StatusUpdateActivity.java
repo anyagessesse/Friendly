@@ -200,7 +200,15 @@ public class StatusUpdateActivity extends AppCompatActivity implements OnMapRead
                     selectedHour = selectedHour - 12;
                 }
 
-                time.setText(selectedHour + ":" + selectedMinute + " " + am_pm);
+                String minuteString;
+                if (selectedMinute < 10) {
+                    // add extra zero to single digits
+                    minuteString = "0" + selectedMinute;
+                } else {
+                    minuteString = "" + selectedMinute;
+                }
+
+                time.setText(selectedHour + ":" + minuteString + " " + am_pm);
             }
         }, hour, minute, false);
         timePickerDialog.show();
