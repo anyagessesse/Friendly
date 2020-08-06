@@ -170,7 +170,7 @@ public class SearchFragment extends Fragment {
                 }
                 if (!friendRequests.isEmpty()) {
                     // change icon to notify user that there are requests
-                    friendRequestNotif.setImageResource(R.drawable.ic_baseline_notification_important_24);
+                    friendRequestNotif.setImageResource(R.drawable.ic_baseline_notifications_active_24);
                 } else {
                     // change icon to plain bell if no notification present
                     friendRequestNotif.setImageResource(R.drawable.ic_baseline_notifications_24);
