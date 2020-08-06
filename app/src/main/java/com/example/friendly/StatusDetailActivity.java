@@ -52,7 +52,7 @@ public class StatusDetailActivity extends AppCompatActivity implements OnMapRead
     private SupportMapFragment mapFragment;
     private GoogleMap map;
     private FusedLocationProviderClient fusedLocationProviderClient;
-    private List<Marker> markers;
+    private Marker marker;
     FriendlyGoogleMapsUtil mapsUtil;
 
     @Override
@@ -73,7 +73,6 @@ public class StatusDetailActivity extends AppCompatActivity implements OnMapRead
         mapFragment.getMapAsync(this::onMapReady);
         // Construct a FusedLocationProviderClient.
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        markers = new ArrayList<>();
 
         //get status clicked on
         status = (Status) getIntent().getParcelableExtra("status");
@@ -150,14 +149,12 @@ public class StatusDetailActivity extends AppCompatActivity implements OnMapRead
         alert.show();
     }
 
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         LatLng latLng = new LatLng(status.getDouble("latitude"), status.getDouble("longitude"));
         Marker statusMarker = map.addMarker(new MarkerOptions().position(latLng));
-        markers.add(statusMarker);
-        mapsUtil = new FriendlyGoogleMapsUtil(StatusDetailActivity.this, this, map, fusedLocationProviderClient, markers);
+        mapsUtil = new FriendlyGoogleMapsUtil(StatusDetailActivity.this, this, map, fusedLocationProviderClient, statusMarker);
 
         // Turn on the My Location layer and the related control on the map.
         mapsUtil.updateLocationUI();
@@ -168,16 +165,7 @@ public class StatusDetailActivity extends AppCompatActivity implements OnMapRead
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        mapsUtil.setLocationPermissionGranted(false);
-        switch (requestCode) {
-            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    mapsUtil.setLocationPermissionGranted(true);
-                }
-            }
-        }
+        mapsUtil.getDeviceLocation();
         mapsUtil.updateLocationUI();
     }
 }

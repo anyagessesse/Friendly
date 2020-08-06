@@ -39,38 +39,16 @@ public class FriendlyGoogleMapsUtil {
     private final AppCompatActivity activity;
 
     private GoogleMap map;
-    private boolean locationPermissionGranted;
     private Location lastKnownLocation;
     private FusedLocationProviderClient fusedLocationProviderClient;
-    private List<Marker> markers;
+    private Marker marker;
 
-    public FriendlyGoogleMapsUtil(Context context, AppCompatActivity activity, GoogleMap map, FusedLocationProviderClient fusedLocationProviderClient, List<Marker> markers) {
+    public FriendlyGoogleMapsUtil(Context context, AppCompatActivity activity, GoogleMap map, FusedLocationProviderClient fusedLocationProviderClient, Marker marker) {
         this.context = context;
         this.activity = activity;
         this.map = map;
         this.fusedLocationProviderClient = fusedLocationProviderClient;
-        this.markers = markers;
-    }
-
-    public void setLocationPermissionGranted(boolean locationPermissionGranted) {
-        this.locationPermissionGranted = locationPermissionGranted;
-    }
-
-    private void getLocationPermission() {
-        /*
-         * Request location permission, so that we can get the location of the
-         * device. The result of the permission request is handled by a callback,
-         * onRequestPermissionsResult.
-         */
-        if (ContextCompat.checkSelfPermission(context,
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            locationPermissionGranted = true;
-        } else {
-            ActivityCompat.requestPermissions(activity,
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-        }
+        this.marker = marker;
     }
 
     public void updateLocationUI() {
@@ -78,14 +56,14 @@ public class FriendlyGoogleMapsUtil {
             return;
         }
         try {
-            if (locationPermissionGranted) {
+            if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 map.setMyLocationEnabled(true);
                 map.getUiSettings().setMyLocationButtonEnabled(true);
             } else {
                 map.setMyLocationEnabled(false);
                 map.getUiSettings().setMyLocationButtonEnabled(false);
                 lastKnownLocation = null;
-                getLocationPermission();
+                ActivityCompat.requestPermissions(activity, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
             }
         } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
@@ -98,30 +76,30 @@ public class FriendlyGoogleMapsUtil {
          * cases when a location is not available.
          */
         try {
-            if (locationPermissionGranted) {
+            if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 Task<Location> locationResult = fusedLocationProviderClient.getLastLocation();
                 locationResult.addOnCompleteListener(activity, new OnCompleteListener<Location>() {
                     @Override
                     public void onComplete(@NonNull Task<Location> task) {
                         if (task.isSuccessful()) {
-                            // Set a marker on the map of the current location
                             lastKnownLocation = task.getResult();
-                            if (lastKnownLocation != null) {
-                                LatLng lastLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-                                Marker userLocation = map.addMarker(new MarkerOptions().position(lastLocation).icon(bitmapDescriptorFromVector(context, R.drawable.ic_baseline_my_location_24)));
-                                markers.add(userLocation);
-                            }
                         } else {
                             Log.d(TAG, "Current location is null.");
                             map.getUiSettings().setMyLocationButtonEnabled(false);
                         }
 
-                        // zoom camera to see all markers
-                        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                        for (Marker marker : markers) {
-                            builder.include(marker.getPosition());
+                        LatLngBounds bounds;
+                        if (lastKnownLocation != null) {
+                            // set map bounds to see current location and marker
+                            bounds = new LatLngBounds.Builder()
+                                    .include(new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()))
+                                    .include(new LatLng(marker.getPosition().latitude, marker.getPosition().longitude)).build();
+                        } else {
+                            // set map bounds to only see marker
+                            bounds = new LatLngBounds.Builder()
+                                    .include(new LatLng(marker.getPosition().latitude, marker.getPosition().longitude)).build();
                         }
-                        LatLngBounds bounds = builder.build();
+
                         int padding = 150; // offset from edges of the map in pixels
                         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
                         map.animateCamera(cu);
