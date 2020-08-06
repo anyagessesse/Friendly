@@ -19,5 +19,5 @@
     <dimen name="map_height">200dp</dimen>
 
     <dimen name="login_title_height">130dp</dimen>
-    <dimen name="login_title_margin">150dp</dimen>
+    <dimen name="login_title_margin">85dp</dimen>
 </resources>
