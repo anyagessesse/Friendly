@@ -35,6 +35,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -182,33 +183,17 @@ public class StatusUpdateActivity extends AppCompatActivity implements OnMapRead
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                 // parse the time
+                SimpleDateFormat parserTime = new SimpleDateFormat("h:mm a");
                 Calendar cal = Calendar.getInstance();
                 cal.set(Calendar.HOUR_OF_DAY, selectedHour);
                 cal.set(Calendar.MINUTE, selectedMinute);
                 if (isStartTime) {
                     dateStart = cal.getTime();
+                    time.setText(parserTime.format(dateStart));
                 } else {
                     dateEnd = cal.getTime();
+                    time.setText(parserTime.format(dateEnd));
                 }
-
-                // get am or pm
-                String am_pm = "";
-                if (cal.get(Calendar.AM_PM) == Calendar.AM) {
-                    am_pm = "AM";
-                } else if (cal.get(Calendar.AM_PM) == Calendar.PM) {
-                    am_pm = "PM";
-                    selectedHour = selectedHour - 12;
-                }
-
-                String minuteString;
-                if (selectedMinute < 10) {
-                    // add extra zero to single digits
-                    minuteString = "0" + selectedMinute;
-                } else {
-                    minuteString = "" + selectedMinute;
-                }
-
-                time.setText(selectedHour + ":" + minuteString + " " + am_pm);
             }
         }, hour, minute, false);
         timePickerDialog.show();
