@@ -173,7 +173,12 @@ public class StatusUpdateActivity extends AppCompatActivity implements OnMapRead
         });
     }
 
-    // time-picker pops up and time is saved in EditText
+    /**
+     * time-picker pops up and time is saved in EditText
+     *
+     * @param time        the text field that the time will be saved in
+     * @param isStartTime if true, timepicker is setting start time, if false, timepicker is setting end time
+     */
     private void getTime(EditText time, Boolean isStartTime) {
         Calendar currentTime = Calendar.getInstance();
         int hour = currentTime.get(Calendar.HOUR_OF_DAY);
