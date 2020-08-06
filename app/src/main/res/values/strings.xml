@@ -15,7 +15,7 @@
 
 
     <string name="description">Description</string>
-    <string name="search2">Search...</string>
+    <string name="search2">Search…</string>
     <string name="end_time">End Time</string>
     <string name="log_out">Log Out</string>
     <string name="change_profile_picture">change profile picture</string>
@@ -29,7 +29,7 @@
     <string name="just_now">just now</string>
     <string name="picture_not_taken">Picture wasn\'t taken!</string>
 
-    <string name="loading">Loading...</string>
+    <string name="loading">Loading…</string>
     <string name="wait">Please wait.</string>
     <string name="confirm_remove">Are you sure you want to remove %1$s from your friends list?</string>
     <string name="confirm">Confirm</string>
@@ -44,7 +44,7 @@
     <string name="start_time">Start Time</string>
 
     <string name="post_warning">Please enter an end time and location.</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
 
     <string name="snack_bar_text">This friend request has been deleted.</string>
     <string name="snack_bar_undo">UNDO</string>
