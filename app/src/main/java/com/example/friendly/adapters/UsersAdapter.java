@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.example.friendly.R;
 import com.example.friendly.objects.FriendRequest;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -235,6 +236,10 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
 
         ParseUser.getCurrentUser().put("friends", friends);
         ParseUser.getCurrentUser().saveInBackground();
+
+        // add notification channel
+        FirebaseMessaging.getInstance().subscribeToTopic(itemUser.getUsername());
+
         Toast.makeText(context, context.getString((R.string.added_friend), itemUser.getUsername()), Toast.LENGTH_SHORT).show();
     }
 

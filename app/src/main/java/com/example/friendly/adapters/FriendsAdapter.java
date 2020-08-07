@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.friendly.R;
 import com.example.friendly.objects.FriendRemoval;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
@@ -135,10 +136,14 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             for (int i = 0; i < friends.size(); i++) {
                 if (friends.get(i).getObjectId().equals(itemUser.getObjectId())) {
                     friends.remove(i);
+                    i--;
                 }
             }
             ParseUser.getCurrentUser().put("friends", friends);
             ParseUser.getCurrentUser().saveInBackground();
+
+            // remove notification channel
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(itemUser.getUsername());
 
             // remove friend from friends list on profile page
             users.remove(getPosition());

@@ -27,6 +27,7 @@ import com.example.friendly.R;
 import com.example.friendly.adapters.FriendsAdapter;
 import com.example.friendly.objects.FriendRemoval;
 import com.example.friendly.objects.FriendRequest;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -206,6 +207,9 @@ public class ProfileFragment extends Fragment {
                     }
                     return 0;
                 });
+
+                // add notification channel
+                FirebaseMessaging.getInstance().subscribeToTopic(friendRequests.get(i).getToUser().getUsername());
 
                 // remove the user from pending friend requests list for that user
                 List<ParseUser> requests = ParseUser.getCurrentUser().getList("requests");

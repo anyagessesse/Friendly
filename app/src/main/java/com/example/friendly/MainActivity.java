@@ -15,7 +15,12 @@ import com.example.friendly.fragments.HomeFragment;
 import com.example.friendly.fragments.ProfileFragment;
 import com.example.friendly.fragments.SearchFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseUser;
+
+import java.util.List;
 
 /**
  * main activity of the app, contains bottom navigation, toolbar, and fragments
@@ -75,6 +80,19 @@ public class MainActivity extends AppCompatActivity {
         });
         //sets the default selection as home fragment
         bottomNavigationView.setSelectedItemId(R.id.action_home);
+
+        try {
+            subscribeToNotifications();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void subscribeToNotifications() throws ParseException {
+        List<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
+        for (int i = 0; i < friends.size(); i++) {
+            FirebaseMessaging.getInstance().subscribeToTopic(friends.get(i).fetchIfNeeded().getUsername());
+        }
     }
 
     private void goLoginActivity() {

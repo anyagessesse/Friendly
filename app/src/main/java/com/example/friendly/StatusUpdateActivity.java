@@ -12,12 +12,18 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
+import com.example.friendly.objects.MySingleton;
 import com.example.friendly.objects.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -34,19 +40,27 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * activity that can be used to create or update a status
  */
 public class StatusUpdateActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static final String TAG = "StatusUpdateActivity";
+    final private String FCM_API = "https://fcm.googleapis.com/fcm/send";
+    private String serverKey;
+    final private String contentType = "application/json";
 
     private ImageView profilePic;
     private TextView username;
@@ -66,10 +80,17 @@ public class StatusUpdateActivity extends AppCompatActivity implements OnMapRead
     private SupportMapFragment mapFragment;
     private GoogleMap map;
 
+
+    String NOTIFICATION_TITLE;
+    String NOTIFICATION_MESSAGE;
+    String TOPIC;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_status_update);
+
+        serverKey = "key=" + getString(R.string.firebase_key);
 
         profilePic = findViewById(R.id.image_profile_pic);
         username = findViewById(R.id.text_username);
@@ -164,6 +185,8 @@ public class StatusUpdateActivity extends AppCompatActivity implements OnMapRead
                 } else {
                     saveStatus(descriptionText, ParseUser.getCurrentUser(), dateStart, dateEnd, stateName, cityName, lat, lon);
 
+                    createNotification();
+
                     //go to home fragment to display statuses
                     Intent intent = new Intent(StatusUpdateActivity.this, MainActivity.class);
                     startActivity(intent);
@@ -171,6 +194,59 @@ public class StatusUpdateActivity extends AppCompatActivity implements OnMapRead
                 }
             }
         });
+    }
+
+    private void createNotification() {
+        // Creating the notification to be sent
+        TOPIC = "/topics/" + ParseUser.getCurrentUser().getUsername(); // TODO change topic after testing
+        NOTIFICATION_TITLE = ParseUser.getCurrentUser().getUsername() + " posted a new status.";
+        if (description.getText().toString().equals("")) {
+            // set default notification message if the description is blank
+            NOTIFICATION_MESSAGE = "I'm free!";
+        } else {
+            NOTIFICATION_MESSAGE = description.getText().toString();
+        }
+
+
+        JSONObject notification = new JSONObject();
+        JSONObject notificationBody = new JSONObject();
+        try {
+            notificationBody.put("title", NOTIFICATION_TITLE);
+            notificationBody.put("message", NOTIFICATION_MESSAGE);
+
+            notification.put("to", TOPIC);
+            notification.put("data", notificationBody);
+        } catch (JSONException e) {
+            Log.e(TAG, "onCreate: " + e.getMessage());
+        }
+        // Send the notification
+        sendNotification(notification);
+    }
+
+    private void sendNotification(JSONObject notification) {
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(FCM_API, notification,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.i(TAG, "onResponse: " + response.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i(TAG, "onErrorResponse: Didn't work");
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("Authorization", serverKey);
+                params.put("Content-Type", contentType);
+                return params;
+            }
+        };
+        MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
     }
 
     /**
