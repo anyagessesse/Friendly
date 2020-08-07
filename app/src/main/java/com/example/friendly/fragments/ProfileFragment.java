@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +37,7 @@ import com.wang.avi.AVLoadingIndicatorView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
@@ -69,8 +69,7 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
@@ -198,11 +197,22 @@ public class ProfileFragment extends Fragment {
             if (friendRequests.get(i).getBoolean(FriendRequest.KEY_ACCEPTED)) {
                 newFriends.add(friendRequests.get(i).getParseUser("toUser"));
 
+                // sort new friend in list
+                Collections.sort(newFriends, (o1, o2) -> {
+                    try {
+                        return o1.fetchIfNeeded().getUsername().compareTo(o2.fetchIfNeeded().getUsername());
+                    } catch (ParseException ex) {
+                        ex.printStackTrace();
+                    }
+                    return 0;
+                });
+
                 // remove the user from pending friend requests list for that user
                 List<ParseUser> requests = ParseUser.getCurrentUser().getList("requests");
                 for (int j = 0; j < requests.size(); j++) {
                     if (requests.get(j).getObjectId().equals(friendRequests.get(i).getParseUser("toUser").getObjectId())) {
                         requests.remove(j);
+                        j--;
                     }
                 }
                 requests.remove(friendRequests.get(i).getParseUser("toUser"));

@@ -124,7 +124,6 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
                         ex.printStackTrace();
                     }
                 }
-
             }
         });
     }
@@ -192,8 +191,6 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
             users.remove(getPosition());
             notifyItemRemoved(getPosition());
         }
-
-
     }
 
     private void handleRequest(ParseUser itemUser) {
@@ -216,7 +213,6 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
                 } else {
                     acceptFriendRequest(friendRequests, itemUser);
                 }
-
             }
         });
     }

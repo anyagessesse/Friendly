@@ -146,6 +146,4 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             Toast.makeText(context, context.getString(R.string.removed_friend, itemUser.getUsername()), Toast.LENGTH_SHORT).show();
         }
     }
-
-
 }
